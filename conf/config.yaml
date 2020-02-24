@@ -1,0 +1,57 @@
+runmode: debug               # run mode: debug, release, test
+addr: :38080                  # HTTP port will cover by env ENV_AUTO_HOST and most in docker use env ENV_WEB_HOST
+name: example-temp-gin              # name of API Server
+
+base_path: /v1                     # api version
+prod_url: http://127.0.0.1:38080   # prod url full ip:port
+test_url: http://127.0.0.1:38080   # test url full ip:port
+dev_url: http://127.0.0.1:38080     # dev url full ip:port
+sslEnable: false                    # isEnable ssl mode this will cover by env ENV_WEB_HTTPS_ENABLE
+
+log:
+  writers: file,stdout            # file,stdout。`file` will let `logger_file` to file，`stdout` will show at std, most of time use bose
+  logger_level: DEBUG             # log level: DEBUG, INFO, WARN, ERROR, FATAL
+  logger_file: log/server.log     # log file setting
+  log_format_text: true          # format `false` will format json, `true` will show abs
+  rollingPolicy: size             # rotate policy, can choose as: daily, size. `daily` store as daily，`size` will save as max
+  log_rotate_date: 1              # rotate date, coordinate `rollingPolicy: daily`
+  log_rotate_size: 8              # rotate size，coordinate `rollingPolicy: size`
+  log_backup_count: 7             # backup max count, log system will compress the log file when log reaches rotate set, this set is max file count
+
+monitor: # monitor
+  status: true             # api status use {monitor.health}
+  health: /status/health   # api health
+  retryCount: 10           # ping api health retry count
+  hardware: true           # hardware true or false
+  status_hardware:
+    disk: /status/hardware/disk     # hardware api disk
+    cpu: /status/hardware/cpu       # hardware api cpu
+    ram: /status/hardware/ram       # hardware api ram
+  debug: true                       # debug true or false
+  pprof: true                       # security true or false
+  security: false                    # debug and security security true or false
+  securityUser:
+    admin: 56a37774c69bd40a1b3e540a3ac8900e # admin:pwd
+
+goAdmin:
+  color_scheme: skin-black
+  language: CN
+  indexUrl: /
+  urlPrefix: admin
+  store:
+    path: ./uploads
+    prefix: uploads
+  sqlLog: true # is open sql log
+  dataBases:
+    default:
+      driver: sqlite # mysql sqlite postgresql mssql
+      file: ./db/default/admin.db # in sqlite must set
+      host: 127.0.0.1
+      port: 27019
+      user: golang
+      pwd: golang123456
+      name: GoAdmin
+      maxIdleCon: 50
+      MaxOpenCon: 150
+  dashBoard:
+    title: GoAdmin-temple
