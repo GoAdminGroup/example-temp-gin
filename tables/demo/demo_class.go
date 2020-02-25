@@ -5,9 +5,12 @@ import (
 	"github.com/GoAdminGroup/example-temp-gin/util/timestamp"
 	"github.com/GoAdminGroup/go-admin/context"
 	"github.com/GoAdminGroup/go-admin/modules/db"
+	form2 "github.com/GoAdminGroup/go-admin/plugins/admin/modules/form"
 	"github.com/GoAdminGroup/go-admin/plugins/admin/modules/table"
 	"github.com/GoAdminGroup/go-admin/template/types"
 	"github.com/GoAdminGroup/go-admin/template/types/form"
+	editType "github.com/GoAdminGroup/go-admin/template/types/table"
+	"github.com/lexkong/log"
 	"strconv"
 )
 
@@ -41,14 +44,20 @@ func GetDemoClassTable(ctx *context.Context) table.Table {
 	info.AddField("Class_desc", "class_desc", db.Varchar)
 	info.AddField("Grade", "grade_id", db.Integer).
 		FieldDisplay(func(model types.FieldModel) interface{} {
-			find, err := dbglobal.Table("demo_grade").
+			gradleTable, err := dbglobal.Table("demo_grade")
+			if err != nil {
+				return model.Value
+			}
+			find, err := gradleTable.
 				Select("grade_name").
 				Where("id", "=", model.Value).First()
 			if err != nil {
 				return model.Value
 			}
 			return find["grade_name"].(string)
-		})
+		}).
+		FieldEditAble(editType.Select).
+		FieldEditOptions(dbFetchDemoGradeFieldOption())
 	info.AddField("Class_time_start", "class_time_start", db.Varchar)
 	info.AddField("Class_time_end", "class_time_end", db.Varchar)
 	info.AddField("Created_at", "created_at", db.Datetime).
@@ -67,18 +76,7 @@ func GetDemoClassTable(ctx *context.Context) table.Table {
 		FieldHelpMsg("can add some desc")
 	formList.AddField("Grade_id", "grade_id", db.Integer, form.SelectSingle).
 		FieldOptionInitFn(func(model types.FieldModel) types.FieldOptions {
-			var options types.FieldOptions
-			allGrade, err := dbglobal.Table("demo_grade").All()
-			if err != nil {
-				return options
-			}
-			for _, grade := range allGrade {
-				var raw types.FieldOption
-				raw.Value = strconv.FormatInt(grade["id"].(int64), 10)
-				raw.Text = grade["grade_name"].(string)
-				options = append(options, raw)
-			}
-			return options
+			return dbFetchDemoGradeFieldOption()
 		}).
 		FieldMust()
 	formList.AddField("Class_time_start", "class_time_start", db.Varchar, form.Text).
@@ -97,5 +95,35 @@ func GetDemoClassTable(ctx *context.Context) table.Table {
 
 	formList.SetTable("demo_class").SetTitle("Demo_class").SetDescription("Demo_class")
 
+	formList.SetPostValidator(func(model form2.Values) error {
+		log.Debugf("SetPostValidator model %v", model)
+		return nil
+	})
+
+	formList.SetPostHook(func(model form2.Values) error {
+		log.Debugf("SetPostHook model %v", model)
+		return nil
+	})
+
 	return demoClassTable
+}
+
+// db fetch demo_grade for show
+func dbFetchDemoGradeFieldOption() types.FieldOptions {
+	var options types.FieldOptions
+	tableGradle, err := dbglobal.Table("demo_grade")
+	if err != nil {
+		return options
+	}
+	allGrade, err := tableGradle.All()
+	if err != nil {
+		return options
+	}
+	for _, grade := range allGrade {
+		var raw types.FieldOption
+		raw.Value = strconv.FormatInt(grade["id"].(int64), 10)
+		raw.Text = grade["grade_name"].(string)
+		options = append(options, raw)
+	}
+	return options
 }
