@@ -30,25 +30,38 @@ func GetUserTable(ctx *context.Context) (userTable table.Table) {
 		},
 	})
 
+	genderOption := types.FieldOptions{ // In-Filter editing options
+		types.FieldOption{
+			Text:          "0",
+			Value:         "men",
+			Selected:      true,
+			SelectedLabel: "men",
+		},
+		types.FieldOption{
+			Text:          "1",
+			Value:         "women",
+			Selected:      false,
+			SelectedLabel: "women",
+		},
+	}
+
 	info := userTable.GetInfo().SetFilterFormLayout(form.LayoutTwoCol)
 	info.AddField("ID", "id", db.Int).FieldSortable()
 	info.AddField("Name", "name", db.Varchar).FieldEditAble(editType.Text).
 		FieldFilterable(types.FilterType{Operator: types.FilterOperatorLike})
-	info.AddField("Gender", "gender", db.Tinyint).FieldDisplay(func(model types.FieldModel) interface{} {
-		if model.Value == "0" {
-			return "men"
-		}
-		if model.Value == "1" {
-			return "women"
-		}
-		return "unknown"
-	}).FieldEditAble(editType.Select).FieldEditOptions([]map[string]string{
-		{"value": "0", "text": "men"},
-		{"value": "1", "text": "women"},
-	}).FieldFilterable(types.FilterType{FormType: form.SelectSingle}).FieldFilterOptions([]map[string]string{
-		{"value": "0", "field": "men"},
-		{"value": "1", "field": "women"},
-	})
+	info.AddField("Gender", "gender", db.Tinyint).
+		FieldDisplay(func(model types.FieldModel) interface{} {
+			if model.Value == "0" {
+				return "men"
+			}
+			if model.Value == "1" {
+				return "women"
+			}
+			return "unknown"
+		}).FieldEditAble(editType.Select).
+		FieldEditOptions(genderOption).
+		FieldFilterable(types.FilterType{FormType: form.SelectSingle}).
+		FieldFilterOptions(genderOption)
 	info.AddField("Phone", "phone", db.Varchar).FieldFilterable()
 	info.AddField("City", "city", db.Varchar).FieldFilterable()
 	info.AddField("Avatar", "avatar", db.Varchar).FieldDisplay(func(value types.FieldModel) interface{} {
@@ -63,7 +76,7 @@ func GetUserTable(ctx *context.Context) (userTable table.Table) {
 	info.AddActionButton("google", action.Jump("https://google.com"))
 	info.AddButton("google", icon.Google, action.Jump("https://google.com"))
 	info.AddButton("info", icon.Terminal, action.PopUp("/admin/popup", "Popup Example",
-		func(ctx *context.Context) (success bool, data, msg string) {
+		func(ctx *context.Context) (success bool, msg string, data interface{}) {
 			return true, fmt.Sprintf("<h2>%s</h2>", msg), ""
 		}))
 	info.SetTable("users").SetTitle("Users").SetDescription("Users")
@@ -73,19 +86,7 @@ func GetUserTable(ctx *context.Context) (userTable table.Table) {
 	formList.AddField("Ip", "ip", db.Varchar, form.Text)
 	formList.AddField("Name", "name", db.Varchar, form.Text)
 	formList.AddField("Gender", "gender", db.Tinyint, form.Radio).
-		FieldOptions([]map[string]string{
-			{
-				"field":    "gender",
-				"label":    "men",
-				"value":    "0",
-				"selected": "checked",
-			}, {
-				"field":    "gender",
-				"label":    "women",
-				"value":    "1",
-				"selected": "",
-			},
-		})
+		FieldOptions(genderOpt())
 	formList.AddField("Phone", "phone", db.Varchar, form.Text)
 	formList.AddField("City", "city", db.Varchar, form.Text)
 	formList.AddField("Custom Field", "role", db.Varchar, form.Text).
