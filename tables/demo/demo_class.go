@@ -1,12 +1,14 @@
 package demo
 
 import (
+	"github.com/GoAdminGroup/example-temp-gin/model/dbglobal"
 	"github.com/GoAdminGroup/example-temp-gin/util/timestamp"
 	"github.com/GoAdminGroup/go-admin/context"
 	"github.com/GoAdminGroup/go-admin/modules/db"
 	"github.com/GoAdminGroup/go-admin/plugins/admin/modules/table"
 	"github.com/GoAdminGroup/go-admin/template/types"
 	"github.com/GoAdminGroup/go-admin/template/types/form"
+	"strconv"
 )
 
 func GetDemoClassTable(ctx *context.Context) table.Table {
@@ -37,7 +39,16 @@ func GetDemoClassTable(ctx *context.Context) table.Table {
 	info.AddField("Id", "id", db.Integer).FieldFilterable()
 	info.AddField("Class_name", "class_name", db.Varchar)
 	info.AddField("Class_desc", "class_desc", db.Varchar)
-	info.AddField("Grade_id", "grade_id", db.Integer)
+	info.AddField("Grade", "grade_id", db.Integer).
+		FieldDisplay(func(model types.FieldModel) interface{} {
+			find, err := dbglobal.Table("demo_grade").
+				Select("grade_name").
+				Where("id", "=", model.Value).First()
+			if err != nil {
+				return model.Value
+			}
+			return find["grade_name"].(string)
+		})
 	info.AddField("Class_time_start", "class_time_start", db.Varchar)
 	info.AddField("Class_time_end", "class_time_end", db.Varchar)
 	info.AddField("Created_at", "created_at", db.Datetime).
@@ -54,7 +65,21 @@ func GetDemoClassTable(ctx *context.Context) table.Table {
 		FieldMust()
 	formList.AddField("Class_desc", "class_desc", db.Varchar, form.Text).
 		FieldHelpMsg("can add some desc")
-	formList.AddField("Grade_id", "grade_id", db.Integer, form.Number).
+	formList.AddField("Grade_id", "grade_id", db.Integer, form.SelectSingle).
+		FieldOptionInitFn(func(model types.FieldModel) types.FieldOptions {
+			var options types.FieldOptions
+			allGrade, err := dbglobal.Table("demo_grade").All()
+			if err != nil {
+				return options
+			}
+			for _, grade := range allGrade {
+				var raw types.FieldOption
+				raw.Value = strconv.FormatInt(grade["id"].(int64), 10)
+				raw.Text = grade["grade_name"].(string)
+				options = append(options, raw)
+			}
+			return options
+		}).
 		FieldMust()
 	formList.AddField("Class_time_start", "class_time_start", db.Varchar, form.Text).
 		FieldHelpMsg("class start time like 9:00").
