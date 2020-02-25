@@ -9,14 +9,14 @@ import (
 	"github.com/GoAdminGroup/go-admin/template/types/form"
 )
 
-func GetDemoClassTable(ctx *context.Context) table.Table {
+func GetDemoGradeTable(ctx *context.Context) table.Table {
 
-	demoClassTable := table.NewDefaultTable(table.
+	demoGradeTable := table.NewDefaultTable(table.
 		DefaultConfigWithDriver("sqlite").
 		SetExportable(true).
 		SetDeletable(false))
 
-	info := demoClassTable.GetInfo()
+	info := demoGradeTable.GetInfo()
 	// Form top layout
 	// Create button is not disabled by default
 	//info.HideNewButton()
@@ -35,32 +35,20 @@ func GetDemoClassTable(ctx *context.Context) table.Table {
 	//info.SetSortAsc()
 
 	info.AddField("Id", "id", db.Integer).FieldFilterable()
-	info.AddField("Class_name", "class_name", db.Varchar)
-	info.AddField("Class_desc", "class_desc", db.Varchar)
-	info.AddField("Grade_id", "grade_id", db.Integer)
-	info.AddField("Class_time_start", "class_time_start", db.Varchar)
-	info.AddField("Class_time_end", "class_time_end", db.Varchar)
+	info.AddField("Grade_name", "grade_name", db.Varchar)
+	info.AddField("Grade_desc", "grade_desc", db.Varchar)
 	info.AddField("Created_at", "created_at", db.Datetime).
 		FieldFilterable(types.FilterType{FormType: form.DatetimeRange}) // Show filters by creation time
 	info.AddField("Updated_at", "updated_at", db.Datetime)
 
-	info.SetTable("demo_class").SetTitle("Demo_class").SetDescription("Demo_class")
+	info.SetTable("demo_grade").SetTitle("Demo_grade").SetDescription("Demo_grade")
 
-	formList := demoClassTable.GetForm()
+	formList := demoGradeTable.GetForm()
 
 	formList.AddField("Id", "id", db.Integer, form.Default).FieldNotAllowAdd()
-	formList.AddField("Class_name", "class_name", db.Varchar, form.Text).
-		FieldHelpMsg("must has class name").
+	formList.AddField("Grade_name", "grade_name", db.Varchar, form.Text).
 		FieldMust()
-	formList.AddField("Class_desc", "class_desc", db.Varchar, form.Text).
-		FieldHelpMsg("can add some desc")
-	formList.AddField("Grade_id", "grade_id", db.Integer, form.Number).
-		FieldMust()
-	formList.AddField("Class_time_start", "class_time_start", db.Varchar, form.Text).
-		FieldHelpMsg("class start time like 9:00").
-		FieldMust()
-	formList.AddField("Class_time_end", "class_time_end", db.Varchar, form.Text).
-		FieldHelpMsg("class start time like 9:45").
+	formList.AddField("Grade_desc", "grade_desc", db.Varchar, form.Text).
 		FieldMust()
 	formList.AddField("Created_at", "created_at", db.Datetime, form.Datetime).
 		FieldNotAllowAdd()
@@ -69,7 +57,7 @@ func GetDemoClassTable(ctx *context.Context) table.Table {
 		FieldValue(timestamp.LocalTimeSecond()).
 		FieldNotAllowEdit()
 
-	formList.SetTable("demo_class").SetTitle("Demo_class").SetDescription("Demo_class")
+	formList.SetTable("demo_grade").SetTitle("Demo_grade").SetDescription("Demo_grade")
 
-	return demoClassTable
+	return demoGradeTable
 }

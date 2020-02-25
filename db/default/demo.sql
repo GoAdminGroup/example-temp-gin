@@ -2,7 +2,7 @@ create table if not exists demo_grade
 (
     id         integer primary key autoincrement,
     grade_name varchar(30) not null,
-    class_desc varchar(120)         default null,
+    grade_desc varchar(120)         default null,
     created_at datetime    not null default current_timestamp,
     updated_at datetime             default null
 );

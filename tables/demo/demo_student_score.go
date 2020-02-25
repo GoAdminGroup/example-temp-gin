@@ -35,7 +35,8 @@ func GetDemoStudentScoreTable(ctx *context.Context) table.Table {
 	//info.SetSortAsc()
 
 	info.AddField("Id", "id", db.Integer).FieldFilterable()
-	info.AddField("Stu_class_id", "stu_class_id", db.Varchar).FieldFilterable()
+	info.AddField("Stu_id", "stu_id", db.Integer).FieldFilterable()
+	info.AddField("Class_id", "class_id", db.Integer).FieldFilterable()
 	info.AddField("Stu_score", "stu_score", db.Int)
 	info.AddField("Created_at", "created_at", db.Datetime).
 		FieldFilterable(types.FilterType{FormType: form.DatetimeRange}) // Show filters by creation time
@@ -46,7 +47,9 @@ func GetDemoStudentScoreTable(ctx *context.Context) table.Table {
 	formList := demoStudentScoreTable.GetForm()
 
 	formList.AddField("Id", "id", db.Integer, form.Default).FieldNotAllowAdd()
-	formList.AddField("Stu_class_id", "stu_class_id", db.Varchar, form.Text).
+	formList.AddField("Stu_id", "stu_id", db.Integer, form.Number).
+		FieldMust()
+	formList.AddField("Class_id", "class_id", db.Integer, form.Number).
 		FieldMust()
 	formList.AddField("Stu_score", "stu_score", db.Int, form.Number).
 		FieldMust()

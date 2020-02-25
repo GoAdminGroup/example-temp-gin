@@ -10,13 +10,15 @@ import "github.com/GoAdminGroup/go-admin/plugins/admin/modules/table"
 // example:
 //
 // "demo_class" => http://localhost:9033/admin/info/demo_class
+// "demo_grade" => http://localhost:9033/admin/info/demo_grade
 // "demo_student" => http://localhost:9033/admin/info/demo_student
 // "demo_student_class" => http://localhost:9033/admin/info/demo_student_class
 // "demo_student_score" => http://localhost:9033/admin/info/demo_student_score
 //
 var Generators = map[string]table.Generator{
-	"demo_class": GetDemoClassTable,
-	"demo_student": GetDemoStudentTable,
+	"demo_class":         GetDemoClassTable,
+	"demo_grade":         GetDemoGradeTable,
+	"demo_student":       GetDemoStudentTable,
 	"demo_student_class": GetDemoStudentClassTable,
 	"demo_student_score": GetDemoStudentScoreTable,
 }
