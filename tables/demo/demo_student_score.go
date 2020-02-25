@@ -54,6 +54,7 @@ func GetDemoStudentScoreTable(ctx *context.Context) table.Table {
 	formList.AddField("Stu_score", "stu_score", db.Int, form.Number).
 		FieldMust()
 	formList.AddField("Created_at", "created_at", db.Datetime, form.Datetime).
+		FieldNotAllowEdit().
 		FieldNotAllowAdd()
 	formList.AddField("Updated_at", "updated_at", db.Datetime, form.Datetime).
 		FieldDefault(timestamp.LocalTimeSecond()).

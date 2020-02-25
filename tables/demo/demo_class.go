@@ -63,6 +63,7 @@ func GetDemoClassTable(ctx *context.Context) table.Table {
 		FieldHelpMsg("class start time like 9:45").
 		FieldMust()
 	formList.AddField("Created_at", "created_at", db.Datetime, form.Datetime).
+		FieldNotAllowEdit().
 		FieldNotAllowAdd()
 	formList.AddField("Updated_at", "updated_at", db.Datetime, form.Datetime).
 		FieldDefault(timestamp.LocalTimeSecond()).

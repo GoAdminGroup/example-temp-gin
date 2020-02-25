@@ -49,6 +49,7 @@ func GetDemoStudentClassTable(ctx *context.Context) table.Table {
 	formList.AddField("Class_id", "class_id", db.Integer, form.Number).FieldNotAllowEdit()
 	formList.AddField("Stu_id", "stu_id", db.Integer, form.Number).FieldNotAllowEdit()
 	formList.AddField("Created_at", "created_at", db.Datetime, form.Datetime).
+		FieldNotAllowEdit().
 		FieldNotAllowAdd()
 	formList.AddField("Updated_at", "updated_at", db.Datetime, form.Datetime).
 		FieldDefault(timestamp.LocalTimeSecond()).

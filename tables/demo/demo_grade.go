@@ -51,6 +51,7 @@ func GetDemoGradeTable(ctx *context.Context) table.Table {
 	formList.AddField("Grade_desc", "grade_desc", db.Varchar, form.Text).
 		FieldMust()
 	formList.AddField("Created_at", "created_at", db.Datetime, form.Datetime).
+		FieldNotAllowEdit().
 		FieldNotAllowAdd()
 	formList.AddField("Updated_at", "updated_at", db.Datetime, form.Datetime).
 		FieldDefault(timestamp.LocalTimeSecond()).
