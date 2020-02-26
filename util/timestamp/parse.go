@@ -34,28 +34,28 @@ func ParesTimestampMicro(timeStr string) (int64, error) {
 //	timeStr -> for parse time string
 //	fromLocation -> parse from like UTC
 //	toLocation   -> parse to   like Asia/Shanghai
-func ParseLocation(format, timeStr, fromLocation, toLocation string) (string, error) {
+func ParseLocation(formFormat, toFormat, timeStr, fromLocation, toLocation string) (string, error) {
 	fromLoc, err := time.LoadLocation(fromLocation)
-	if err != nil {
-		return "0", err
-	}
-	toLoc, err := time.LoadLocation(toLocation)
-	if err != nil {
-		return "0", err
-	}
-	parse, err := time.ParseInLocation(format, timeStr, fromLoc)
 	if err != nil {
 		return "", err
 	}
-	return parse.In(toLoc).Format(format), nil
+	toLoc, err := time.LoadLocation(toLocation)
+	if err != nil {
+		return "", err
+	}
+	parse, err := time.ParseInLocation(formFormat, timeStr, fromLoc)
+	if err != nil {
+		return "", err
+	}
+	return parse.In(toLoc).Format(toFormat), nil
 }
 
 // use format 2006-01-02 15:04:05 as ParseLocation()
 func ParseLocationSecond(timeStr, fromLocation, toLocation string) (string, error) {
-	return ParseLocation("2006-01-02 15:04:05", timeStr, fromLocation, toLocation)
+	return ParseLocation("2006-01-02 15:04:05", "2006-01-02 15:04:05", timeStr, fromLocation, toLocation)
 }
 
 // use format 2006-01-02 15:04:05.999999 as ParseLocation()
 func ParseLocationMicro(timeStr, fromLocation, toLocation string) (string, error) {
-	return ParseLocation("2006-01-02 15:04:05.999999", timeStr, fromLocation, toLocation)
+	return ParseLocation("2006-01-02 15:04:05.999999", "2006-01-02 15:04:05.999999", timeStr, fromLocation, toLocation)
 }

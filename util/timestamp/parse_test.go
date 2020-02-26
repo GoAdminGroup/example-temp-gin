@@ -35,7 +35,7 @@ func TestParesTimestampMicro(t *testing.T) {
 	if err != nil {
 		t.Errorf("ParesTimestampMicro err %v", err)
 	}
-	t.Logf("timestampMicro %v", timestampMicro)
+	t.Logf("timestampMicro -> %v", timestampMicro)
 	assert.NotZero(t, timestampMicro)
 
 	errorTimeStr := "2018:07:11 15:07:51.456123"
@@ -46,12 +46,22 @@ func TestParesTimestampMicro(t *testing.T) {
 	assert.Zero(t, str2TimestampMicroErr)
 }
 
+func TestParseLocation(t *testing.T) {
+	testTime := "2020-02-25T16:52:18Z"
+	parseLocation, err := ParseLocation("2006-01-02T15:04:05Z", "2006-01-02 15:04:05", testTime, "UTC", "Asia/Shanghai")
+	if err != nil {
+		t.Errorf("ParseLocation err: %v", err)
+	}
+	t.Logf("parseLocation -> %v", parseLocation)
+	assert.NotEmpty(t, parseLocation)
+}
+
 func TestParseLocationSecond(t *testing.T) {
 	parseLocationSecond, err := ParseLocationSecond("2020-02-26 10:08:58", "UTC", "Asia/Shanghai")
 	if err != nil {
-		t.Errorf("ParseLocationSecond err: %v", parseLocationSecond)
+		t.Errorf("ParseLocationSecond err: %v", err)
 	}
-	t.Logf("parseLocationSecond %v", parseLocationSecond)
+	t.Logf("parseLocationSecond -> %v", parseLocationSecond)
 	assert.NotEmpty(t, parseLocationSecond)
 
 	errorTimeString := "2020:02#26 10:08:58"
@@ -67,7 +77,7 @@ func TestParseLocationMicro(t *testing.T) {
 	if err != nil {
 		t.Errorf("ParseLocationMicro err: %v", parseLocationMicro)
 	}
-	t.Logf("parseLocationMicro %v", parseLocationMicro)
+	t.Logf("parseLocationMicro -> %v", parseLocationMicro)
 	assert.NotEmpty(t, parseLocationMicro)
 
 	errorTimeString := "2020:02#26 10:08:58"
