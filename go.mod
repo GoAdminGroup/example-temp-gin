@@ -4,7 +4,7 @@ go 1.13
 
 require (
 	github.com/GoAdminGroup/go-admin v1.2.3-0.20200225113545-47cef74a73f7
-	github.com/GoAdminGroup/themes v0.0.24-0.20200224142930-c52bda2e1069
+	github.com/GoAdminGroup/themes v0.0.24-0.20200226044744-f8c0743d7e94
 	github.com/bar-counter/monitor v1.1.0
 	github.com/fsnotify/fsnotify v1.4.7
 	github.com/gin-gonic/gin v1.5.0
