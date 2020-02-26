@@ -89,8 +89,8 @@ func GetDemoClassTable(ctx *context.Context) table.Table {
 		FieldNotAllowEdit().
 		FieldNotAllowAdd()
 	formList.AddField("Updated_at", "updated_at", db.Datetime, form.Datetime).
-		FieldDefault(timestamp.LocalTimeSecond()).
-		FieldValue(timestamp.LocalTimeSecond()).
+		FieldDefault(timestamp.UTCTimeSecond()).
+		FieldValue(timestamp.UTCTimeSecond()).
 		FieldNotAllowEdit()
 
 	formList.SetTable("demo_class").SetTitle("Demo_class").SetDescription("Demo_class")

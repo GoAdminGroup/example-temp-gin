@@ -1,6 +1,7 @@
 package demo
 
 import (
+	"github.com/GoAdminGroup/example-temp-gin/model/dbglobal"
 	"github.com/GoAdminGroup/example-temp-gin/util/timestamp"
 	"github.com/GoAdminGroup/go-admin/context"
 	"github.com/GoAdminGroup/go-admin/modules/db"
@@ -38,7 +39,10 @@ func GetDemoGradeTable(ctx *context.Context) table.Table {
 	info.AddField("Grade_name", "grade_name", db.Varchar)
 	info.AddField("Grade_desc", "grade_desc", db.Varchar)
 	info.AddField("Created_at", "created_at", db.Datetime).
-		FieldFilterable(types.FilterType{FormType: form.DatetimeRange}) // Show filters by creation time
+		FieldFilterable(types.FilterType{FormType: form.DatetimeRange}). // Show filters by creation time
+		FieldDisplay(func(model types.FieldModel) interface{} {
+
+	})
 	info.AddField("Updated_at", "updated_at", db.Datetime)
 
 	info.SetTable("demo_grade").SetTitle("Demo_grade").SetDescription("Demo_grade")
@@ -54,8 +58,8 @@ func GetDemoGradeTable(ctx *context.Context) table.Table {
 		FieldNotAllowEdit().
 		FieldNotAllowAdd()
 	formList.AddField("Updated_at", "updated_at", db.Datetime, form.Datetime).
-		FieldDefault(timestamp.LocalTimeSecond()).
-		FieldValue(timestamp.LocalTimeSecond()).
+		FieldDefault(timestamp.UTCTimeSecond()).
+		FieldValue(timestamp.UTCTimeSecond()).
 		FieldNotAllowEdit()
 
 	formList.SetTable("demo_grade").SetTitle("Demo_grade").SetDescription("Demo_grade")
