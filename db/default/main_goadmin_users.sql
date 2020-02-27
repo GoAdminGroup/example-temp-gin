@@ -1,0 +1,2 @@
+UPDATE goadmin_users SET username = 'admin', password = '$2a$10$PiOOa.tfXJlM.VrpwPQz/.xsl8EsdDHUxMfgtaBXkpG5x8LtO.ce2', name = 'admin', avatar = '', remember_token = 'tlNcBVK9AvfYH7WEnwB1RKvocJu8FfRy4um3DJtwdHuJy0dwFsLOgAc0xUfh', created_at = '2019-09-10 00:00:00', updated_at = '2019-09-10 00:00:00' WHERE id = 1;
+UPDATE goadmin_users SET username = 'operator', password = '$2a$10$rVqkOzHjN2MdlEprRflb1eGP0oZXuSrbJLOmJagFsCd81YZm0bsh.', name = 'Operator', avatar = '', remember_token = null, created_at = '2019-09-10 00:00:00', updated_at = '2019-09-10 00:00:00' WHERE id = 2;

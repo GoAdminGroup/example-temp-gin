@@ -1,0 +1,2 @@
+UPDATE goadmin_permissions SET name = 'All permission', slug = '*', http_method = '', http_path = '*', created_at = '2019-09-10 00:00:00', updated_at = '2019-09-10 00:00:00' WHERE id = 1;
+UPDATE goadmin_permissions SET name = 'Dashboard', slug = 'dashboard', http_method = 'GET,PUT,POST,DELETE', http_path = '/', created_at = '2019-09-10 00:00:00', updated_at = '2019-09-10 00:00:00' WHERE id = 2;

@@ -28,6 +28,10 @@ modFetch:
 	-@go list -m -versions github.com/GoAdminGroup/go-admin | awk '{print $$1 " lastest: " $$NF}'
 	-@go list -m -versions github.com/GoAdminGroup/themes | awk '{print $$1 " lastest: " $$NF}'
 
+modMaster:
+	-go get -v github.com/GoAdminGroup/go-admin@master
+	-go get -v github.com/GoAdminGroup/themes@master
+
 helpGoMod:
 	@echo "Help: MakeGoMod.mk"
 	@echo "this project use go mod, so golang version must 1.12+"
@@ -36,5 +40,6 @@ helpGoMod:
 	@echo "~> make modClean             - clearn mod local file and path"
 	@echo "~> make modGraphDependencies - see depends graph of this project"
 	@echo "~> make modTidy              - tidy depends graph of project"
-	@echo "~> make modFetch             - fetch newset version of depends"
+	@echo "~> make modFetch             - fetch newset version of depends GoAdminGroup go-admin and themes"
+	@echo "~> make modMaster            - get master version of depends GoAdminGroup go-admin and themes"
 	@echo ""

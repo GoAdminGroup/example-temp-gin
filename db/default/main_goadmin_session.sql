@@ -1,0 +1,6 @@
+UPDATE goadmin_session SET sid = 'ae49b887-3911-45a4-ab53-a2936b2c5dfa', "values" = '{"user_id":1}', created_at = '2020-02-24 15:48:10', updated_at = '2020-02-24 15:48:10' WHERE id = 1;
+UPDATE goadmin_session SET sid = '584f480c-0f21-4715-aa0a-4b13edf779da', "values" = '{"user_id":1}', created_at = '2020-02-25 14:26:05', updated_at = '2020-02-25 14:26:05' WHERE id = 2;
+UPDATE goadmin_session SET sid = '72767a85-2de1-4730-ab18-9b888d5f8c70', "values" = '{"user_id":1}', created_at = '2020-02-25 16:43:51', updated_at = '2020-02-25 16:43:51' WHERE id = 3;
+UPDATE goadmin_session SET sid = '941f10eb-e3c4-4127-8309-c5560048db85', "values" = '{"user_id":1}', created_at = '2020-02-26 05:42:02', updated_at = '2020-02-26 05:42:02' WHERE id = 4;
+UPDATE goadmin_session SET sid = '144c7987-35d0-4c8f-89df-ad0de20164ba', "values" = '{"user_id":1}', created_at = '2020-02-26 10:22:32', updated_at = '2020-02-26 10:22:32' WHERE id = 5;
+UPDATE goadmin_session SET sid = '17d34b0e-d291-4c35-90a3-13692df81ae3', "values" = '{"user_id":1}', created_at = '2020-02-27 02:13:11', updated_at = '2020-02-27 02:13:11' WHERE id = 6;
