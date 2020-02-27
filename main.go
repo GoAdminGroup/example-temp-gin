@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
+	"github.com/fvbock/endless"
 	"io/ioutil"
-	"net/http"
 	"time"
 
 	"github.com/GoAdminGroup/example-temp-gin/router"
@@ -61,7 +61,15 @@ func main() {
 
 	log.Infof("Start to listening the incoming requests on http address: %v", viper.GetString("addr"))
 	log.Infof("Sever name: %v , has start!", viper.GetString("name"))
-	err := http.ListenAndServe(viper.GetString("addr"), g)
+
+	//err := http.ListenAndServe(viper.GetString("addr"), g)
+	//if err != nil {
+	//	log.Errorf(err, "server run error %v", err)
+	//} else {
+	//	log.Infof("server run success!")
+	//}
+
+	err := endless.ListenAndServe(viper.GetString("addr"), g)
 	if err != nil {
 		log.Errorf(err, "server run error %v", err)
 	} else {

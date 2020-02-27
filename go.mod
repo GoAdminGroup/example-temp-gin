@@ -7,6 +7,7 @@ require (
 	github.com/GoAdminGroup/themes v0.0.24
 	github.com/bar-counter/monitor v1.1.0
 	github.com/fsnotify/fsnotify v1.4.7
+	github.com/fvbock/endless v0.0.0-20170109170031-447134032cb6
 	github.com/gin-gonic/gin v1.5.0
 	github.com/gogf/gf v1.11.4 // indirect
 	github.com/lexkong/log v0.0.0-20180607165131-972f9cd951fc

@@ -36,7 +36,7 @@ func GetDemoGradeTable(ctx *context.Context) table.Table {
 	//info.SetSortAsc()
 
 	info.AddField("Id", "id", db.Integer).FieldFilterable()
-	info.AddField("Grade_name", "grade_name", db.Varchar)
+	info.AddField("Grade Name", "grade_name", db.Varchar)
 	info.AddField("Grade_desc", "grade_desc", db.Varchar)
 	info.AddField("Created_at", "created_at", db.Datetime).
 		FieldFilterable(types.FilterType{FormType: form.DatetimeRange}). // Show filters by creation time
