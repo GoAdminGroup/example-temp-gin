@@ -8,17 +8,92 @@ networks:
 #volumes:
 #  web-data:
 services:
+  # https://hub.docker.com/r/bitnami/mysql
+  example-temp-gin-mysql-fix:
+    container_name: 'example-temp-gin-mysql-fix'
+    image: bitnami/mysql:5.7.27
+    user: root
+    command: chown -R 1001:1001 /bitnami/
+    volumes:
+      - ./data/mysql-example-temp-gin:/bitnami/
+  # https://hub.docker.com/r/bitnami/mysql
+  example-temp-gin-mysql:
+    container_name: 'example-temp-gin-mysql'
+    image: bitnami/mysql:5.7.27
+    depends_on:
+      - example-temp-gin-mysql-fix
+    ports:
+      - '39005:3306'
+    volumes:
+      - './data/mysql-example-temp-gin:/bitnami/mysql/data'
+      - './data/mysql-example-temp-gin-conf/my_custom.cnf:/opt/bitnami/mysql/conf/bitnami/my_custom.cnf:ro'
+      - './data/tmp/:/tmp'
+    environment:
+      MYSQL_ROOT_PASSWORD: '3a5f549be630a467'
+      MYSQL_DATABASE: 'GoAdmin'
+      MYSQL_USER: 'golang'
+      MYSQL_PASSWORD: 'golang123456'
+    restart: always # on-failure:3 or unless-stopped always default no
+  # https://hub.docker.com/r/bitnami/redis/
+  example-temp-gin-redis-fix: # use https://github.com/bitnami/bitnami-docker-mongodb/issues/103#issuecomment-424833086 fix ubunut error
+    container_name: 'example-temp-gin-redis-fix'
+    image: 'bitnami/redis:5.0.0'
+    user: root
+    command: chown -R 1001:1001 /bitnami
+    volumes:
+      - ./data/redis-example-temp-gin:/bitnami
+  example-temp-gin-redis:
+    container_name: 'example-temp-gin-redis'
+    # for fix debian folder error
+    image: 'bitnami/redis:5.0.0'
+    depends_on:
+      - example-temp-gin-redis-fix
+    environment:
+      # ALLOW_EMPTY_PASSWORD is recommended only for development.
+      - ALLOW_EMPTY_PASSWORD=yes
+      # - REDIS_REPLICATION_MODE=slave
+      # - REDIS_PASSWORD=[pwd]
+      # - REDIS_MASTER_HOST=[pwd]
+      # - REDIS_MASTER_PORT_NUMBER=[pwd]
+      # - REDIS_MASTER_PASSWORD=[pwd]
+      - REDIS_EXTRA_FLAGS=--maxmemory 300mb
+    ports:
+      - '39006:6379'
+    volumes:
+      - './data/redis-example-temp-gin-etc/redis.conf:/opt/bitnami/redis/etc/redis.conf'
+      - './data/redis-example-temp-gin/data:/bitnami/redis/data'
+    restart: always # on-failure:3 or unless-stopped always default no
   example-temp-gin:
     container_name: "${ROOT_NAME}"
     image: '${ROOT_NAME}:${DIST_TAG}' # see local docker file
+    depends_on:
+      - example-temp-gin-mysql
+      - example-temp-gin-redis
     ports:
       - "39000:${ENV_WEB_PORT}"
     volumes:
+      - "./data/biz/maintain/:/usr/src/maintain"
       - "$PWD:/usr/src/myapp"
     environment:
       - ENV_WEB_HTTPS_ENABLE=false
       - ENV_WEB_AUTO_HOST=false
-      - ENV_WEB_HOST=${ENV_WEB_HOST}:${ENV_WEB_PORT}
-#      - ENV_WEB_HOST=0.0.0.0:39000
+      - ENV_WEB_HOST=${ENV_WEB_HOST}:${ENV_WEB_PORT} # 0.0.0.0:39000
+      - ENV_WEB_DB_MYSQL_HOST=example-temp-gin-mysql
+      - ENV_WEB_DB_MYSQL_PORT=3306
+      - ENV_WEB_DB_MYSQL_DBNAME=GoAdmin
+      - ENV_WEB_DB_MYSQL_USER=golang
+      - ENV_WEB_DB_MYSQL_PWD=golang123456
+      - ENV_WEB_CACHE_REDIS_ADDR=example-temp-gin-redis:6379
+      - ENV_WEB_CACHE_REDIS_PASSWORD=
+      - ENV_WEB_CACHE_REDIS_DB=0
     working_dir: "/usr/src/myapp"
-    command: ["make", "${ENV_MAKE_TASK}"]
+    command:
+      - bash
+      - /usr/src/maintain/wait-for-it.sh
+      - '-t'
+      - '0'
+      - 'example-temp-gin-mysql:3306'
+      - '--'
+      - make
+      - dev
+

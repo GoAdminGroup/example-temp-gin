@@ -2,6 +2,7 @@ package router
 
 import (
 	"fmt"
+	"github.com/GoAdminGroup/example-temp-gin/model/cache"
 	"github.com/GoAdminGroup/example-temp-gin/model/dbglobal"
 	"github.com/GoAdminGroup/go-admin/engine"
 	"github.com/GoAdminGroup/go-admin/modules/db"
@@ -9,7 +10,7 @@ import (
 )
 
 func initDBConnection(eng *engine.Engine) error {
-	dbType := viper.GetString("goAdmin.dataBases.default.driver")
+	dbType := viper.GetString("go_admin.data_bases.default.driver")
 	var dbConn db.Connection
 	switch dbType {
 	default:
@@ -24,5 +25,11 @@ func initDBConnection(eng *engine.Engine) error {
 		dbConn = eng.MssqlConnection()
 	}
 	dbglobal.SetGlobalConn(dbConn)
+
+	_, err := cache.InitRedis()
+	if err != nil {
+		return err
+	}
+
 	return nil
 }

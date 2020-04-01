@@ -2,12 +2,12 @@ package router
 
 import (
 	"fmt"
+	"github.com/GoAdminGroup/example-temp-gin/pkg/zlog"
 	"net/http"
 	"time"
 
 	"github.com/bar-counter/monitor"
 	"github.com/gin-gonic/gin"
-	"github.com/lexkong/log"
 	"github.com/spf13/viper"
 )
 
@@ -51,7 +51,7 @@ func monitorAPI(g *gin.Engine) {
 
 	err := monitor.Register(g, monitorCfg)
 	if err != nil {
-		log.Errorf(err, "monitor Register err %v", err)
+		zlog.S().Errorf("monitor Register err %v", err)
 	}
 }
 
@@ -65,26 +65,26 @@ func checkPingServer(apiBaseURL string) {
 	// Ping the server to make sure the router is working.
 	go func() {
 		if err := pingServer(apiBaseURL, viper.GetString("monitor.health")); err != nil {
-			log.Error("The router has no response, or it might took too long to start up.", err)
+			zlog.S().Error("The router has no response, or it might took too long to start up.", err)
 		}
-		log.Info("The router has been deployed successfully.")
+		zlog.S().Info("The router has been deployed successfully.")
 	}()
 }
 
 // ping server pings the http server.
 func pingServer(apiBaseURL, checkRouter string) error {
 	pingApi := apiBaseURL + checkRouter
-	log.Infof("pingServer test api : %v", pingApi)
+	zlog.S().Infof("pingServer test api : %v", pingApi)
 	for i := 0; i < viper.GetInt("monitor.retryCount"); i++ {
 		// Ping the server by sending a GET request to `/health`.
 		resp, err := http.Get(pingApi)
 		if err == nil && resp.StatusCode == 200 {
-			log.Infof("pingServer test pass api at: %v", pingApi)
+			zlog.S().Infof("pingServer test pass api at: %v", pingApi)
 			return nil
 		}
 
 		// Sleep for a second to continue the next ping.
-		log.Warnf("Waiting for the router, retry in 1 second. Check URL: %v", pingApi)
+		zlog.S().Warnf("Waiting for the router, retry in 1 second. Check URL: %v", pingApi)
 		time.Sleep(time.Second)
 	}
 	//noinspection ALL

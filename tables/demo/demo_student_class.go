@@ -11,7 +11,7 @@ import (
 func GetDemoStudentClassTable(ctx *context.Context) table.Table {
 
 	demoStudentClassTable := table.NewDefaultTable(table.
-		DefaultConfigWithDriver("sqlite").
+		DefaultConfigWithDriver("mysql").
 		SetExportable(false).
 		SetDeletable(false))
 

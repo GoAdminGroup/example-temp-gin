@@ -21,14 +21,14 @@ const (
 )
 
 var mustConfigString = []string{
-	"runmode",
+	"run_mode",
 	"addr",
 	"name",
-	"base_path",
+	"api_version",
 	// project set
 }
 
-type Config struct {
+type ConfFile struct {
 	Name string
 }
 
@@ -39,7 +39,7 @@ type Config struct {
 //	ENV_AUTO_HOST=true
 //	ENV_WEB_HOST 127.0.0.1:8000
 func Init(cfg string) error {
-	c := Config{
+	c := ConfFile{
 		Name: cfg,
 	}
 
@@ -53,7 +53,7 @@ func Init(cfg string) error {
 		return err
 	}
 
-	// init BaseConf
+	// init baseConfig
 	initBaseConf()
 
 	// TODO other config
@@ -64,7 +64,7 @@ func Init(cfg string) error {
 	return nil
 }
 
-func (c *Config) initConfig() error {
+func (c *ConfFile) initConfig() error {
 	if c.Name != "" {
 		viper.SetConfigFile(c.Name) // 如果指定了配置文件，则解析指定的配置文件
 	} else {
@@ -87,6 +87,11 @@ func (c *Config) initConfig() error {
 	}
 
 	if err := checkMustHasString(); err != nil {
+		return err
+	}
+
+	err := viper.Unmarshal(&global)
+	if err != nil {
 		return err
 	}
 

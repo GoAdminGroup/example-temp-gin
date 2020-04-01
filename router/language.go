@@ -7,7 +7,7 @@ import (
 
 // default use language.CN
 func configGoAdminLanguageByYaml() string {
-	langConf := viper.GetString("goAdmin.language")
+	langConf := viper.GetString("go_admin.language")
 	var langRes = language.CN
 	switch langConf {
 	case "CN":

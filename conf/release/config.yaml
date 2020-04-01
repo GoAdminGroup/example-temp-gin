@@ -1,0 +1,83 @@
+name: example-temp-gin              # name of API Server
+run_mode: release                      # run mode: debug, test, release
+addr: :39000                  # HTTP port will cover by env ENV_AUTO_HOST and most in docker use env ENV_WEB_HOST
+api_url: http://127.0.0.1:39000     # api url full ip:port
+api_version: /v1                    # api version
+ssl_enable: false             # is enable ssl mode this will cover by env ENV_WEB_HTTPS_ENABLE
+
+zap:
+  AtomicLevel: 1 # DebugLevel:-1 InfoLevel:0 WarnLevel:1 ErrorLevel:2
+  FieldsAuto: false # is use auto Fields key set
+  Fields:
+    Key: key
+    Val: val
+  Development: true # is open Open file and line number
+  Encoding: console # output format, only use console or json, default is console
+  rotate:
+    Filename: log/example-temp-gin.log # Log file path
+    MaxSize: 16 # Maximum size of each zlog file, Unit: M
+    MaxBackups: 300 # How many backups are saved in the zlog file
+    MaxAge: 365 # How many days can the file be keep, Unit: day
+    Compress: true # need compress
+  EncoderConfig:
+    TimeKey: time
+    LevelKey: level
+    NameKey: logger
+    CallerKey: caller
+    MessageKey: msg
+    StacktraceKey: stacktrace
+    TimeEncoder: ISO8601TimeEncoder # ISO8601TimeEncoder EpochMillisTimeEncoder EpochNanosTimeEncoder EpochTimeEncoder default is ISO8601TimeEncoder
+    EncodeDuration: SecondsDurationEncoder # NanosDurationEncoder SecondsDurationEncoder StringDurationEncoder default is SecondsDurationEncoder
+    EncodeLevel: CapitalLevelEncoder # CapitalLevelEncoder CapitalColorLevelEncoder LowercaseColorLevelEncoder LowercaseLevelEncoder default is CapitalLevelEncoder
+    EncodeCaller: ShortCallerEncoder # ShortCallerEncoder FullCallerEncoder default is FullCallerEncoder
+
+monitor: # monitor
+  status: true             # api status use {monitor.health}
+  health: /status/health   # api health
+  retryCount: 10           # ping api health retry count
+  hardware: true           # hardware true or false
+  status_hardware:
+    disk: /status/hardware/disk     # hardware api disk
+    cpu: /status/hardware/cpu       # hardware api cpu
+    ram: /status/hardware/ram       # hardware api ram
+  debug: true                       # debug true or false
+  pprof: false                       # security true or false
+  security: true                    # debug and security security true or false
+  securityUser:
+    admin: 56a37774c69bd40a1b3e540a3ac8900e # admin:pwd
+
+go_admin:
+  title: example-temp-gin
+  theme: adminlte
+  color_scheme: skin-black
+  language: CN
+  captcha: true
+  index_url: /
+  url_prefix: admin
+  store:
+    path: ./uploads
+    prefix: uploads
+  data_bases:
+    default:
+      driver: mysql # mysql sqlite postgresql mssql
+      host: 127.0.0.1
+      port: 27019
+      user: golang
+      pwd: golang123456
+      name: GoAdmin
+      max_idle_con: 50
+      max_open_con: 150
+  use_custom: true
+  custom:
+    logo_url: //img.icons8.com/dusk/64/000000/admin-settings-male.png
+  dash_board:
+    title: example-temp-gin
+
+Redis:
+  addr: localhost:39006
+  password:
+  db: 0
+  max_retries: 0 # Default is to not retry failed commands
+  dial_timeout: 5 # Default is 5 seconds.
+  read_timeout: 3 # Default is 3 seconds.
+  write_timeout: 3 # Default is ReadTimeout

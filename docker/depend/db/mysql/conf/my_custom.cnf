@@ -1,0 +1,35 @@
+[client]
+
+default-character-set = utf8mb4
+
+[mysqld]
+# basic settings
+autocommit = 1
+
+# buffer settings
+max_allowed_packet = 96M
+slave_pending_jobs_size_max= 100M
+
+# connection
+interactive_timeout = 1800
+wait_timeout = 1800
+lock_wait_timeout = 1800
+max_connections = 1000
+max_user_connections = 1000
+max_connect_errors = 10
+read_buffer_size = 2M
+read_rnd_buffer_size = 4M
+sort_buffer_size = 4M
+tmp_table_size = 8M
+join_buffer_size = 8M
+
+# log settings
+## open slow query settings
+slow_query_log = 1
+log-error = /opt/bitnami/mysql/logs/mysqld.log
+slow-query-log-file=/opt/bitnami/mysql/logs/slow-mysqld.log
+log_slow_admin_statements = 1
+
+expire_logs_days = 5
+long_query_time = 2
+min_examined_row_limit = 100

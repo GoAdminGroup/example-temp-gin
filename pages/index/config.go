@@ -11,7 +11,7 @@ type baseConfig struct {
 func ConfigBase() *baseConfig {
 	if cfgBase == nil {
 		cfgBase = &baseConfig{
-			Title: viper.GetString("goAdmin.dashBoard.title"),
+			Title: viper.GetString("go_admin.dash_board.title"),
 		}
 	}
 	return cfgBase

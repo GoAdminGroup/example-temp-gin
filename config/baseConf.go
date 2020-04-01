@@ -5,30 +5,40 @@ import (
 	"net/url"
 	"strings"
 
+	"github.com/GoAdminGroup/example-temp-gin/pkg/zlog"
 	"github.com/GoAdminGroup/example-temp-gin/util/sys"
-	"github.com/lexkong/log"
 	"github.com/spf13/viper"
 )
 
-var baseConf *BaseConf
+var baseConf *baseConfig
 
-type BaseConf struct {
-	IsDebug   bool
-	EnvName   string
-	BaseURL   string
-	SSLEnable bool
+type baseConfig struct {
+	IsDebug    bool
+	EnvName    string
+	BaseURL    string
+	BaseHost   string
+	ApiVersion string
+	SSLEnable  bool
+}
+
+func BaseConfig() *baseConfig {
+	return baseConf
+}
+
+func EnvName() string {
+	return baseConf.EnvName
 }
 
 func BaseURL() string {
 	return baseConf.BaseURL
 }
 
-func IsDebug() bool {
-	return baseConf.IsDebug
+func BaseHost() string {
+	return baseConf.BaseHost
 }
 
-func EnvName() string {
-	return baseConf.EnvName
+func IsDebug() bool {
+	return baseConf.IsDebug
 }
 
 // read default config by conf/config.yaml
@@ -38,7 +48,7 @@ func EnvName() string {
 //	ENV_AUTO_HOST=true
 //	ENV_WEB_HOST 127.0.0.1:8000
 func initBaseConf() {
-	var env = viper.GetString("runmode")
+	var env = viper.GetString("run_mode")
 	var confDebug bool
 	if env == "debug" || env == "test" {
 		confDebug = true
@@ -52,29 +62,22 @@ func initBaseConf() {
 	} else {
 		ssLEnable = viper.GetBool("sslEnable")
 	}
-	runMode := viper.GetString("runmode")
-	var apiBase string
-	if "debug" == runMode {
-		apiBase = viper.GetString("dev_url")
-	} else if "test" == runMode {
-		apiBase = viper.GetString("test_url")
-	} else {
-		apiBase = viper.GetString("prod_url")
-	}
+	apiBase := viper.GetString("api_url")
 
 	uri, err := url.Parse(apiBase)
 	if err != nil {
 		panic(err)
 	}
-
-	log.Debugf("uri.Host %v", uri.Host)
+	var apiHost string
+	apiHost = uri.Host
 	baseHOSTByEnv := viper.GetString(defaultEnvHost)
 	if baseHOSTByEnv != "" {
 		uri.Host = baseHOSTByEnv
+		apiHost = baseHOSTByEnv
 		apiBase = uri.String()
 	} else {
 		isAutoHost := viper.GetBool(defaultEnvAutoGetHost)
-		log.Debugf("isAutoHost %v", isAutoHost)
+		zlog.S().Debugf("isAutoHost %v", isAutoHost)
 		if isAutoHost {
 			ipv4, err := sys.NetworkLocalIP()
 			if err == nil {
@@ -86,6 +89,7 @@ func initBaseConf() {
 					proc = "http"
 				}
 				apiBase = fmt.Sprintf("%v://%v%v", proc, ipv4, addrStr)
+				apiHost = fmt.Sprintf("%v%v", ipv4, addrStr)
 			}
 		}
 	}
@@ -93,12 +97,14 @@ func initBaseConf() {
 	if ssLEnable {
 		apiBase = strings.Replace(apiBase, "http://", "https://", 1)
 	}
-
-	log.Debugf("apiBase %v", apiBase)
-	baseConf = &BaseConf{
-		BaseURL:   apiBase,
-		SSLEnable: ssLEnable,
-		EnvName:   env,
-		IsDebug:   confDebug,
+	zlog.S().Debugf("config.BaseConfig()\nIsDebug: %v\nEnvName: %v\nBaseURL: %v\nBaseHost: %v\nApiVersion: %v\nSSLEnable: %v",
+		confDebug, env, apiBase, apiHost, viper.GetString("api_version"), ssLEnable)
+	baseConf = &baseConfig{
+		IsDebug:    confDebug,
+		EnvName:    env,
+		BaseURL:    apiBase,
+		BaseHost:   apiHost,
+		ApiVersion: viper.GetString("api_version"),
+		SSLEnable:  ssLEnable,
 	}
 }

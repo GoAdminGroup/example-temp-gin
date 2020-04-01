@@ -64,43 +64,37 @@ func DashboardPage() (types.Panel, error) {
 	 * Box
 	/**************************/
 
-	table := components.Table().SetType("table").SetInfoList([]map[string]template.HTML{
-		{
-			"Order ID":   "OR9842",
-			"Item":       "Call of Duty IV",
-			"Status":     "shipped",
-			"Popularity": "90%",
-		}, {
-			"Order ID":   "OR9842",
-			"Item":       "Call of Duty IV",
-			"Status":     "shipped",
-			"Popularity": "90%",
-		}, {
-			"Order ID":   "OR9842",
-			"Item":       "Call of Duty IV",
-			"Status":     "shipped",
-			"Popularity": "90%",
-		}, {
-			"Order ID":   "OR9842",
-			"Item":       "Call of Duty IV",
-			"Status":     "shipped",
-			"Popularity": "90%",
-		},
-	}).SetThead([]map[string]string{
-		{
-			"head":     "Order ID",
-			"sortable": "0",
-		}, {
-			"head":     "Item",
-			"sortable": "0",
-		}, {
-			"head":     "Status",
-			"sortable": "0",
-		}, {
-			"head":     "Popularity",
-			"sortable": "0",
-		},
-	}).GetContent()
+	table := components.Table().SetType("table").
+		SetInfoList([]map[string]types.InfoItem{
+			{
+				"Order ID":   {Content: "OR9842"},
+				"Item":       {Content: "Call of Duty IV"},
+				"Status":     {Content: "shipped"},
+				"Popularity": {Content: "90%"},
+			}, {
+				"Order ID":   {Content: "OR9842"},
+				"Item":       {Content: "Call of Duty IV"},
+				"Status":     {Content: "shipped"},
+				"Popularity": {Content: "90%"},
+			}, {
+				"Order ID":   {Content: "OR9842"},
+				"Item":       {Content: "Call of Duty IV"},
+				"Status":     {Content: "shipped"},
+				"Popularity": {Content: "90%"},
+			}, {
+				"Order ID":   {Content: "OR9842"},
+				"Item":       {Content: "Call of Duty IV"},
+				"Status":     {Content: "shipped"},
+				"Popularity": {Content: "90%"},
+			},
+		}).
+		SetThead(types.Thead{
+			{Head: "Order ID"},
+			{Head: "Item"},
+			{Head: "Status"},
+			{Head: "Popularity"},
+		}).
+		GetContent()
 
 	boxInfo := components.Box().
 		WithHeadBorder().

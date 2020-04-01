@@ -1,5 +1,0 @@
-INSERT INTO demo_student (id, stu_name, stu_age, stu_sex, created_at, updated_at) VALUES (1, 'Marry Kamilah', 12, 2, '2020-02-24 17:08:53', '2020-02-25 01:07:48');
-INSERT INTO demo_student (id, stu_name, stu_age, stu_sex, created_at, updated_at) VALUES (2, 'Li Reece', 11, 1, '2020-02-24 17:09:19', '2020-02-25 01:09:00');
-INSERT INTO demo_student (id, stu_name, stu_age, stu_sex, created_at, updated_at) VALUES (3, 'Joy Boris', 10, 1, '2020-02-24 17:09:38', '2020-02-25 01:09:27');
-INSERT INTO demo_student (id, stu_name, stu_age, stu_sex, created_at, updated_at) VALUES (4, 'Lily Sandy', 10, 2, '2020-02-24 17:10:04', '2020-02-25 01:09:47');
-INSERT INTO demo_student (id, stu_name, stu_age, stu_sex, created_at, updated_at) VALUES (5, 'Yii Class', 12, 2, '2020-02-25 15:36:17', '2020-02-25 23:36:09');

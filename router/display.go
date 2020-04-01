@@ -2,7 +2,7 @@ package router
 
 import (
 	"github.com/GoAdminGroup/example-temp-gin/config"
-	"github.com/lexkong/log"
+	"github.com/GoAdminGroup/example-temp-gin/pkg/zlog"
 	"time"
 )
 
@@ -12,7 +12,6 @@ func delayDisplayViewRouterInfo() {
 
 func delayViewRouterInfo() {
 	time.Sleep(time.Second * 5)
-	log.Infof("=> delayDisplayViewRouterInfo Load view config BaseURL at: %v", config.BaseURL())
-	log.Infof("login    at: %v%v", config.BaseURL(), "/admin ")
-	//log.Infof("404 Page at: %v%v", config.BaseURL(), "/404.html")
+	zlog.S().Infof("=> delayDisplayViewRouterInfo Load view config BaseURL at: %v", config.BaseURL())
+	zlog.S().Infof("login    at: %v%v", config.BaseURL(), "/admin ")
 }

@@ -12,7 +12,7 @@ import (
 func GetDemoStudentScoreTable(ctx *context.Context) table.Table {
 
 	demoStudentScoreTable := table.NewDefaultTable(table.
-		DefaultConfigWithDriver("sqlite").
+		DefaultConfigWithDriver("mysql").
 		SetExportable(true).
 		SetDeletable(false))
 

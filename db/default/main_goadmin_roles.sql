@@ -1,2 +1,0 @@
-UPDATE goadmin_roles SET name = 'Administrator', slug = 'administrator', created_at = '2019-09-10 00:00:00', updated_at = '2019-09-10 00:00:00' WHERE id = 1;
-UPDATE goadmin_roles SET name = 'Operator', slug = 'operator', created_at = '2019-09-10 00:00:00', updated_at = '2019-09-10 00:00:00' WHERE id = 2;

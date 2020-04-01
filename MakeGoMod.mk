@@ -1,45 +1,83 @@
 # this file must use as base Makefile
 
-modList:
-	-GOPROXY="$(ENV_GO_PROXY)" go list -m -json all
-
 modClean:
-	@if [ -f ./go.sum ]; then rm -f ./go.sum && echo "~> cleaned file ./go.sum"; else echo "~> has cleaned file ./go.sum"; fi
-	@if [ -d ./vendor ]; then rm -rf ./vendor && echo "~> cleaned folder ./vendor"; else echo "~> has cleaned folder ./vendor"; fi
+	@echo "=> try to clean ./go.sum and ./vendor"
+	@if [ -f ./go.sum ]; \
+	then rm -f ./go.sum && echo "~> cleaned file ./go.sum"; \
+	else echo "~> has cleaned file ./go.sum"; \
+	fi
+	@if [ -d ./vendor ]; \
+	then rm -rf ./vendor && echo "~> cleaned folder ./vendor";\
+	else echo "~> has cleaned folder ./vendor"; \
+	fi
+
+modList:
+	@echo "// show go list -m -json all"
+	@if [ $(ENV_NEED_PROXY) -eq 1 ]; \
+	then GOPROXY="$(ENV_GO_PROXY)" go list -m -json all; \
+	else go list -m -json all; \
+	fi
+
+modGraphDependencies:
+	@if [ $(ENV_NEED_PROXY) -eq 1 ]; \
+	then echo "-> now use GOPROXY=$(ENV_GO_PROXY)"; \
+	fi
+	-@if [ $(ENV_NEED_PROXY) -eq 1 ]; \
+	then GOPROXY="$(ENV_GO_PROXY)" GO111MODULE=on go mod graph; \
+	else GO111MODULE=on go mod graph; \
+	fi
 
 modVerify:
 	# in GOPATH must use [ GO111MODULE=on go mod ] to use
-	-GOPROXY="$(ENV_GO_PROXY)" GO111MODULE=on go mod verify
+	# open goproxy to build change Makefile: [ ENV_NEED_PROXY=1 ]
+	@if [ $(ENV_NEED_PROXY) -eq 1 ]; \
+	then echo "-> now use GOPROXY=$(ENV_GO_PROXY)"; \
+	fi
+	@if [ $(ENV_NEED_PROXY) -eq 1 ]; \
+	then GOPROXY="$(ENV_GO_PROXY)" GO111MODULE=on go mod verify; \
+	else GO111MODULE=on go mod verify; \
+	fi
 
 modDownload:
-	-GOPROXY="$(ENV_GO_PROXY)" GO111MODULE=on go mod download
-	-GOPROXY="$(ENV_GO_PROXY)" GO111MODULE=on go mod vendor
+	@if [ $(ENV_NEED_PROXY) -eq 1 ]; \
+	then echo "-> now use GOPROXY=$(ENV_GO_PROXY)"; \
+	fi
+	@echo "=> If error can use [ make modVerify ] to fix"
+	@if [ $(ENV_NEED_PROXY) -eq 1 ]; \
+	then GOPROXY="$(ENV_GO_PROXY)" GO111MODULE=on go mod download && GOPROXY="$(ENV_GO_PROXY)" GO111MODULE=on go mod vendor; \
+	else GO111MODULE=on go mod download && GO111MODULE=on go mod vendor; \
+	fi
 
 modTidy:
-	-GOPROXY="$(ENV_GO_PROXY)" GO111MODULE=on go mod tidy
+	@if [ $(ENV_NEED_PROXY) -eq 1 ]; \
+	then echo "-> now use GOPROXY=$(ENV_GO_PROXY)"; \
+	fi
+	-if [ $(ENV_NEED_PROXY) -eq 1 ]; \
+	then GOPROXY="$(ENV_GO_PROXY)" GO111MODULE=on go mod tidy; \
+	else GO111MODULE=on go mod tidy; \
+	fi
 
 dep: modVerify modDownload
-	@echo "just check depends info below"
-
-modGraphDependencies:
-	GOPROXY="$(ENV_GO_PROXY)" GO111MODULE=on go mod graph
+	@echo "-> just check depends below"
 
 modFetch:
+	@echo "can fetch last version as"
+	go list -m -versions github.com/gin-gonic/gin | awk '{print $$1 " lastest: " $$NF}'
 	-@go list -m -versions github.com/GoAdminGroup/go-admin | awk '{print $$1 " lastest: " $$NF}'
 	-@go list -m -versions github.com/GoAdminGroup/themes | awk '{print $$1 " lastest: " $$NF}'
-
-modMaster:
-	-go get -v github.com/GoAdminGroup/go-admin@master
-	-go get -v github.com/GoAdminGroup/themes@master
 
 helpGoMod:
 	@echo "Help: MakeGoMod.mk"
 	@echo "this project use go mod, so golang version must 1.12+"
-	@echo "go mod evn: GOPROXY=$(ENV_GO_PROXY)"
-	@echo "~> make dep                  - check depends of project and download all, child task is: modVerify modDownload"
-	@echo "~> make modClean             - clearn mod local file and path"
+	@if [ $(ENV_NEED_PROXY) -eq 1 ]; \
+	then echo "-> now use GOPROXY=$(ENV_GO_PROXY)"; \
+	fi
+	@echo "~> make modClean             - will clean ./go.sum and ./vendor"
+	@echo "~> make modList              - list all depends as: go list -m -json all"
 	@echo "~> make modGraphDependencies - see depends graph of this project"
-	@echo "~> make modTidy              - tidy depends graph of project"
-	@echo "~> make modFetch             - fetch newset version of depends GoAdminGroup go-admin and themes"
-	@echo "~> make modMaster            - get master version of depends GoAdminGroup go-admin and themes"
+	@echo "~> make modVerify            - verify as: go mod verify"
+	@echo "~> make modDownload          - download as: go mod download and go mod vendor"
+	@echo "~> make modTidy              - tidy depends graph of project as go mod tidy"
+	@echo "~> make dep                  - check depends of project and download all, parent task is: modVerify modDownload"
+	@echo "~> make modFetch             - check last version of one lib"
 	@echo ""

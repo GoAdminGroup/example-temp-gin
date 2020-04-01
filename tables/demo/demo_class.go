@@ -2,6 +2,7 @@ package demo
 
 import (
 	"github.com/GoAdminGroup/example-temp-gin/model/dbglobal"
+	"github.com/GoAdminGroup/example-temp-gin/pkg/zlog"
 	"github.com/GoAdminGroup/example-temp-gin/util/timestamp"
 	"github.com/GoAdminGroup/go-admin/context"
 	"github.com/GoAdminGroup/go-admin/modules/db"
@@ -10,14 +11,13 @@ import (
 	"github.com/GoAdminGroup/go-admin/template/types"
 	"github.com/GoAdminGroup/go-admin/template/types/form"
 	editType "github.com/GoAdminGroup/go-admin/template/types/table"
-	"github.com/lexkong/log"
 	"strconv"
 )
 
 func GetDemoClassTable(ctx *context.Context) table.Table {
 
 	demoClassTable := table.NewDefaultTable(table.
-		DefaultConfigWithDriver("sqlite").
+		DefaultConfigWithDriver("mysql").
 		SetExportable(true).
 		SetDeletable(false))
 
@@ -96,12 +96,12 @@ func GetDemoClassTable(ctx *context.Context) table.Table {
 	formList.SetTable("demo_class").SetTitle("Demo_class").SetDescription("Demo_class")
 
 	formList.SetPostValidator(func(model form2.Values) error {
-		log.Debugf("SetPostValidator model %v", model)
+		zlog.S().Debugf("SetPostValidator model %v", model)
 		return nil
 	})
 
 	formList.SetPostHook(func(model form2.Values) error {
-		log.Debugf("SetPostHook model %v", model)
+		zlog.S().Debugf("SetPostHook model %v", model)
 		return nil
 	})
 

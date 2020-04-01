@@ -1,8 +1,11 @@
 ### build temple
+
+data/
 build/
 dist/
 log/
 uploads/
+docker/example-temp-gin-dev/
 
 ### log
 

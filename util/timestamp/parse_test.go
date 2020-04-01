@@ -56,6 +56,26 @@ func TestParseLocation(t *testing.T) {
 	assert.NotEmpty(t, parseLocation)
 }
 
+func TestParseLocationISO8601TimeSecond(t *testing.T) {
+	testTime := "2020-02-25T16:52:18Z"
+	locationISO8601TimeSecond, err := ParseLocationISO8601TimeSecond(testTime, "UTC", "Asia/Shanghai")
+	if err != nil {
+		t.Errorf("ParseLocationISO8601TimeSecond err: %v", err)
+	}
+	t.Logf("ParseLocationISO8601TimeSecond -> %v", locationISO8601TimeSecond)
+	assert.NotEmpty(t, locationISO8601TimeSecond)
+}
+
+func TestParseLocationISO8601TimeSecondUTC(t *testing.T) {
+	testTime := "2020-02-25T16:52:18Z"
+	locationISO8601TimeSecondUTC, err := ParseLocationISO8601TimeSecondUTC(testTime)
+	if err != nil {
+		t.Errorf("ParseLocationISO8601TimeSecondUTC err: %v", err)
+	}
+	t.Logf("ParseLocationISO8601TimeSecondUTC -> %v", locationISO8601TimeSecondUTC)
+	assert.NotEmpty(t, locationISO8601TimeSecondUTC)
+}
+
 func TestParseLocationSecond(t *testing.T) {
 	parseLocationSecond, err := ParseLocationSecond("2020-02-26 10:08:58", "UTC", "Asia/Shanghai")
 	if err != nil {

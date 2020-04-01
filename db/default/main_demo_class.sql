@@ -1,2 +1,0 @@
-INSERT INTO demo_class (id, class_name, class_desc, class_time_start, class_time_end, created_at, updated_at) VALUES (1, 'English', '', '9:00', '9:45', '2020-02-24 17:03:28', '2020-02-25 01:03:22');
-INSERT INTO demo_class (id, class_name, class_desc, class_time_start, class_time_end, created_at, updated_at) VALUES (2, 'Mathematics', '', '10:00', '10:45', '2020-02-24 17:04:21', '2020-02-25 01:03:51');

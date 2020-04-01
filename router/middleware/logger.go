@@ -1,8 +1,8 @@
 package middleware
 
 import (
+	"github.com/GoAdminGroup/example-temp-gin/pkg/zlog"
 	"github.com/gin-gonic/gin"
-	"github.com/lexkong/log"
 	"time"
 )
 
@@ -37,7 +37,7 @@ func LoggerMiddleware() gin.HandlerFunc {
 		// status code
 		statusCode := c.Writer.Status()
 		if statusCode < 400 {
-			log.Debugf(
+			zlog.S().Debugf(
 				"=> %15s %13v | %s < %3d -> %s",
 				clientIP,
 				latencyTime,
@@ -45,7 +45,7 @@ func LoggerMiddleware() gin.HandlerFunc {
 				statusCode,
 				reqUri)
 		} else if statusCode < 500 {
-			log.Infof(
+			zlog.S().Infof(
 				"=> %15s %13v | %s < %3d -> %s",
 				clientIP,
 				latencyTime,
@@ -53,7 +53,7 @@ func LoggerMiddleware() gin.HandlerFunc {
 				statusCode,
 				reqUri)
 		} else {
-			log.Warnf(
+			zlog.S().Warnf(
 				"=> %15s %13v | %s < %3d -> %s",
 				clientIP,
 				latencyTime,

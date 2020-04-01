@@ -3,17 +3,17 @@ module github.com/GoAdminGroup/example-temp-gin
 go 1.13
 
 require (
-	github.com/GoAdminGroup/go-admin v1.2.3
-	github.com/GoAdminGroup/themes v0.0.24
+	github.com/GoAdminGroup/go-admin v1.2.7
+	github.com/GoAdminGroup/themes v0.0.29
 	github.com/bar-counter/monitor v1.1.0
 	github.com/fsnotify/fsnotify v1.4.7
-	github.com/fvbock/endless v0.0.0-20170109170031-447134032cb6
-	github.com/gin-gonic/gin v1.5.0
+	github.com/gin-gonic/gin v1.6.2
+	github.com/go-redis/redis v6.15.7+incompatible
+	github.com/go-sql-driver/mysql v1.5.0
 	github.com/gogf/gf v1.11.4 // indirect
-	github.com/lexkong/log v0.0.0-20180607165131-972f9cd951fc
-	github.com/onsi/ginkgo v1.12.0 // indirect
-	github.com/onsi/gomega v1.9.0 // indirect
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.6.2
 	github.com/stretchr/testify v1.5.1
+	go.uber.org/zap v1.10.0
+	gopkg.in/natefinch/lumberjack.v2 v2.0.0
 )

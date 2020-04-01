@@ -50,6 +50,14 @@ func ParseLocation(formFormat, toFormat, timeStr, fromLocation, toLocation strin
 	return parse.In(toLoc).Format(toFormat), nil
 }
 
+func ParseLocationISO8601TimeSecondUTC(timeStr string) (string, error) {
+	return ParseLocation("2006-01-02T15:04:05Z", "2006-01-02 15:04:05", timeStr, "UTC", "UTC")
+}
+
+func ParseLocationISO8601TimeSecond(timeStr, fromLocation, toLocation string) (string, error) {
+	return ParseLocation("2006-01-02T15:04:05Z", "2006-01-02 15:04:05", timeStr, fromLocation, toLocation)
+}
+
 // use format 2006-01-02 15:04:05 as ParseLocation()
 func ParseLocationSecond(timeStr, fromLocation, toLocation string) (string, error) {
 	return ParseLocation("2006-01-02 15:04:05", "2006-01-02 15:04:05", timeStr, fromLocation, toLocation)

@@ -1,19 +1,19 @@
 package demo
 
 import (
+	"github.com/GoAdminGroup/example-temp-gin/pkg/zlog"
 	"github.com/GoAdminGroup/example-temp-gin/util/timestamp"
 	"github.com/GoAdminGroup/go-admin/context"
 	"github.com/GoAdminGroup/go-admin/modules/db"
 	"github.com/GoAdminGroup/go-admin/plugins/admin/modules/table"
 	"github.com/GoAdminGroup/go-admin/template/types"
 	"github.com/GoAdminGroup/go-admin/template/types/form"
-	"github.com/lexkong/log"
 )
 
 func GetDemoGradeTable(ctx *context.Context) table.Table {
 
 	demoGradeTable := table.NewDefaultTable(table.
-		DefaultConfigWithDriver("sqlite").
+		DefaultConfigWithDriver("mysql").
 		SetExportable(true).
 		SetDeletable(false))
 
@@ -41,7 +41,7 @@ func GetDemoGradeTable(ctx *context.Context) table.Table {
 	info.AddField("Created_at", "created_at", db.Datetime).
 		FieldFilterable(types.FilterType{FormType: form.DatetimeRange}). // Show filters by creation time
 		FieldDisplay(func(model types.FieldModel) interface{} {
-			log.Debugf("model.Value -> %v", model.Value)
+			zlog.S().Debugf("model.Value -> %v", model.Value)
 			timeStr, err := timestamp.ParseLocation("2006-01-02T15:04:05Z", "2006-01-02 15:04:05", model.Value, "UTC", "Asia/Shanghai")
 			if err != nil {
 				return model.Value

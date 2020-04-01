@@ -1,3 +1,0 @@
-UPDATE goadmin_role_permissions SET role_id = 1, permission_id = 1, created_at = '2019-09-10 00:00:00', updated_at = '2019-09-10 00:00:00';
-UPDATE goadmin_role_permissions SET role_id = 1, permission_id = 2, created_at = '2019-09-10 00:00:00', updated_at = '2019-09-10 00:00:00';
-UPDATE goadmin_role_permissions SET role_id = 2, permission_id = 2, created_at = '2019-09-10 00:00:00', updated_at = '2019-09-10 00:00:00';

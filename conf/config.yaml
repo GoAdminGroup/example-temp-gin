@@ -1,22 +1,35 @@
-runmode: debug               # run mode: debug, release, test
-addr: :38080                  # HTTP port will cover by env ENV_AUTO_HOST and most in docker use env ENV_WEB_HOST
 name: example-temp-gin              # name of API Server
+run_mode: debug                      # run mode: debug, test, release
+addr: :39000                  # HTTP port will cover by env ENV_AUTO_HOST and most in docker use env ENV_WEB_HOST
+api_url: http://127.0.0.1:39000     # api url full ip:port
+api_version: /v1                    # api version
+ssl_enable: false             # is enable ssl mode this will cover by env ENV_WEB_HTTPS_ENABLE
 
-base_path: /v1                     # api version
-prod_url: http://127.0.0.1:38080   # prod url full ip:port
-test_url: http://127.0.0.1:38080   # test url full ip:port
-dev_url: http://127.0.0.1:38080     # dev url full ip:port
-sslEnable: false                    # isEnable ssl mode this will cover by env ENV_WEB_HTTPS_ENABLE
-
-log:
-  writers: file,stdout            # file,stdout。`file` will let `logger_file` to file，`stdout` will show at std, most of time use bose
-  logger_level: DEBUG             # log level: DEBUG, INFO, WARN, ERROR, FATAL
-  logger_file: log/server.log     # log file setting
-  log_format_text: true          # format `false` will format json, `true` will show abs
-  rollingPolicy: size             # rotate policy, can choose as: daily, size. `daily` store as daily，`size` will save as max
-  log_rotate_date: 1              # rotate date, coordinate `rollingPolicy: daily`
-  log_rotate_size: 8              # rotate size，coordinate `rollingPolicy: size`
-  log_backup_count: 7             # backup max count, log system will compress the log file when log reaches rotate set, this set is max file count
+zap:
+  AtomicLevel: -1 # DebugLevel:-1 InfoLevel:0 WarnLevel:1 ErrorLevel:2
+  FieldsAuto: false # is use auto Fields key set
+  Fields:
+    Key: key
+    Val: val
+  Development: true # is open Open file and line number
+  Encoding: console # output format, only use console or json, default is console
+  rotate:
+    Filename: log/example-temp-gin.log # Log file path
+    MaxSize: 16 # Maximum size of each zlog file, Unit: M
+    MaxBackups: 10 # How many backups are saved in the zlog file
+    MaxAge: 7 # How many days can the file be keep, Unit: day
+    Compress: true # need compress
+  EncoderConfig:
+    TimeKey: time
+    LevelKey: level
+    NameKey: logger
+    CallerKey: caller
+    MessageKey: msg
+    StacktraceKey: stacktrace
+    TimeEncoder: ISO8601TimeEncoder # ISO8601TimeEncoder EpochMillisTimeEncoder EpochNanosTimeEncoder EpochTimeEncoder default is ISO8601TimeEncoder
+    EncodeDuration: SecondsDurationEncoder # NanosDurationEncoder SecondsDurationEncoder StringDurationEncoder default is SecondsDurationEncoder
+    EncodeLevel: CapitalColorLevelEncoder # CapitalLevelEncoder CapitalColorLevelEncoder LowercaseColorLevelEncoder LowercaseLevelEncoder default is CapitalLevelEncoder
+    EncodeCaller: ShortCallerEncoder # ShortCallerEncoder FullCallerEncoder default is FullCallerEncoder
 
 monitor: # monitor
   status: true             # api status use {monitor.health}
@@ -33,25 +46,38 @@ monitor: # monitor
   securityUser:
     admin: 56a37774c69bd40a1b3e540a3ac8900e # admin:pwd
 
-goAdmin:
+go_admin:
+  title: example-temp-gin
+  theme: adminlte
   color_scheme: skin-black
   language: CN
-  indexUrl: /
-  urlPrefix: admin
+  captcha: false
+  index_url: /
+  url_prefix: admin
   store:
     path: ./uploads
     prefix: uploads
-  sqlLog: true # is open sql log
-  dataBases:
+  data_bases:
     default:
-      driver: sqlite # mysql sqlite postgresql mssql
-      file: ./db/default/admin.db # in sqlite must set
+      driver: mysql # mysql sqlite postgresql mssql
       host: 127.0.0.1
-      port: 27019
+      port: 39005
       user: golang
       pwd: golang123456
       name: GoAdmin
-      maxIdleCon: 50
-      MaxOpenCon: 150
-  dashBoard:
-    title: GoAdmin-temple
+      max_idle_con: 50
+      max_open_con: 150
+  use_custom: true
+  custom:
+    logo_url: //img.icons8.com/dusk/64/000000/admin-settings-male.png
+  dash_board:
+    title: example-temp-gin
+
+Redis:
+  addr: localhost:39006
+  password:
+  db: 0
+  max_retries: 0 # Default is to not retry failed commands
+  dial_timeout: 5 # Default is 5 seconds.
+  read_timeout: 3 # Default is 3 seconds.
+  write_timeout: 3 # Default is ReadTimeout

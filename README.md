@@ -5,17 +5,49 @@
 
 ## use
 
-- `need dep to management golang dependenceis`, will change to go mod
+- `need go mod to management golang dependenceis`
+
+- [ ] change API Port for dev replace `39000` to your want port
+- [ ] change mysql Port for dev replace `39005` to your want port
+- [ ] change redis Port for dev replace `39006` to your want port
 
 ```sh
 $ make help
 # check base dep
 $ make init
-# first run just use
+
+# beacuse projec use mysql and reids so must run
+$ make dockerDependDevFileInit dockerDependDevUp
+# then see log to init database
+
+# first run just use dep to get dep
 $ make dep
 # change conf/config.yaml
 # run server as dev
 $ make dev
+
+# to remove dev docker and data can use
+$ make dockerDependDevStop dockerDependDevContainRemove && rm -rf ./docker/example-temp-gin-dev
+
+# run as docker contant
+# Before run this project in docker must or can not find docker image
+$ make dockerLocalFileRest dockerLocalImageRebuild
+# if use linux
+$ make dockerRunLinux
+# if use macOS
+$ make dockerRunDarwin
+# stop or remove docker
+$ make dockerStop
+$ make dockerContainRemove
+# more fast use of dockerStop dockerContainRemove dockerLocalImageRemove
+$ make dockerBuildRemove
+
+# can build less file run
+# build less
+$ make clean dockerLessBuild
+
+# rest to dev mod
+$ make dockerBuildRemove dockerLocalFileRest
 ```
 
 # config
@@ -24,14 +56,33 @@ $ make dev
 
 ## log
 
-+ `writers`: 输出位置，有2个可选项：file,stdout。选择file会将日志记录到`logger_file`指定的日志文件中，选择stdout会将日志输出到标准输出，当然也可以两者同时选择
-+ `logger_level`: 日志级别，DEBUG, INFO, WARN, ERROR, FATAL
-+ `logger_file`: 日志文件
-+ `log_format_text`: 日志的输出格式，json或者plaintext，`false`会输出成json格式，`true`会输出成非json格式
-+ `rollingPolicy`: rotate依据，可选的有：daily, size。如果选daily则根据天进行转存，如果是size则根据大小进行转存
-+ `log_rotate_date`: rotate转存时间，配合`rollingPolicy: daily`使用
-+ `log_rotate_size`: rotate转存大小，配合`rollingPolicy: size`使用
-+ `log_backup_count`:当日志文件达到转存标准时，log系统会将该日志文件进行压缩备份，这里指定了备份文件的最大个数。
+```yaml
+zap:
+  AtomicLevel: -1 # DebugLevel:-1 InfoLevel:0 WarnLevel:1 ErrorLevel:2
+  FieldsAuto: false # is use auto Fields key set
+  Fields:
+    Key: key
+    Val: val
+  Development: true # is open Open file and line number
+  Encoding: console # output format, only use console or json, default is console
+  rotate:
+    Filename: log/temp-gin-api-swag.log # Log file path
+    MaxSize: 16 # Maximum size of each zlog file, Unit: M
+    MaxBackups: 10 # How many backups are saved in the zlog file
+    MaxAge: 7 # How many days can the file be keep, Unit: day
+    Compress: true # need compress
+  EncoderConfig:
+    TimeKey: time
+    LevelKey: level
+    NameKey: logger
+    CallerKey: caller
+    MessageKey: msg
+    StacktraceKey: stacktrace
+    TimeEncoder: ISO8601TimeEncoder # ISO8601TimeEncoder EpochMillisTimeEncoder EpochNanosTimeEncoder EpochTimeEncoder default is ISO8601TimeEncoder
+    EncodeDuration: SecondsDurationEncoder # NanosDurationEncoder SecondsDurationEncoder StringDurationEncoder default is SecondsDurationEncoder
+    EncodeLevel: CapitalColorLevelEncoder # CapitalLevelEncoder CapitalColorLevelEncoder LowercaseColorLevelEncoder LowercaseLevelEncoder default is CapitalLevelEncoder
+    EncodeCaller: ShortCallerEncoder # ShortCallerEncoder FullCallerEncoder default is FullCallerEncoder
+```
 
 # dev
 
@@ -40,17 +91,22 @@ $ make dev
 ```bash
 go version go1.13.4 darwin/amd64
 gin version v1.5.0
-go-admin v1.2.2
+go-admin v1.1.7
 ```
- 
+
 ## fast-use
 
 ### db-init
 
-- this project use SQLite
-- if use postgresql
-- and install db tools see [db/postgresql.md](db/postgresql.md)
-- use docker-compose to init db entry [help db-docker-compose](db/postgresql.md#db-docker-compose)
+- use docker-compose to init db entry [help db-docker-compose](db/README.md#db-docker-compose)
+- and install db tools see [db/README.md](db/README.md)
+
+```bash
+# use script to init goAdmin base db
+make dbPostgreImportAdmin
+# init full biz db need db password
+make dbPostgreAllBiz
+```
 
 ### project-run
 
@@ -74,97 +130,4 @@ make helpAdm
 
 ## folder-Def
 
-```
-.
-├── Dockerfile
-├── LIB.md
-├── MakeAdm.mk
-├── MakeDockerRun.mk
-├── MakeGoMod.mk
-├── Makefile     # make utils
-├── README.md    # readme
-├── api                         # api package for api
-│   ├── api.go                  # api loader
-│   └── demo
-│       └── popup.go
-├── build                       # build dir, not in git management
-├── conf                        # service config folder makeFile use conf/test conf/release
-│   └── config.yaml
-├── config                      # load conf package
-│   ├── baseConf.go
-│   ├── config.go
-│   ├── logConf.go
-│   ├── probe.go
-│   └── watchConf.go
-├── db                          # db management
-│   ├── README.md
-│   └── default
-│       ├── 1-demo.ini          # adm load config file
-│       ├── admin.db
-│       └── demo.sql
-├── docker-compose.yml          # docker-compse use to run as docker 
-├── go.mod                      # go mod package management
-├── go.sum                      # not in git management
-├── log                         # log folder, not in git management
-│   └── server.log
-├── main.go                     # program entry
-├── model                       # model some db or model struct
-│   └── dbglobal
-│       └── db.go
-├── pages                       # admin pages folder
-│   └── index
-│       ├── config.go
-│       └── dashborad.go
-├── pkg                         # some pkg for use in plural projects
-│   ├── errdef
-│   │   ├── errcode.go
-│   │   ├── errdef.go
-│   │   ├── errdef_test.go
-│   │   └── noroute.go
-│   └── tableutil
-│       └── optionsYesOrNo.go
-├── router                      # admin loader in router
-│   ├── dbConn.go               # db connect
-│   ├── display.go              # cli display
-│   ├── interceptor             # rouder package for load tables
-│   │   ├── admin.go
-│   │   └── externalLink.go     # externalink page
-│   ├── language.go
-│   ├── middleware              # gin middleware
-│   │   ├── header.go           # services header set
-│   │   └── logger.go           # logger middlerware
-│   ├── monitor.go              # monitor
-│   ├── noRouteBiz.go           # no router biz
-│   ├── plugin                  # admin plugin
-│   │   ├── admin.go
-│   │   └── example.go
-│   ├── router.go               # router entry
-│   └── static.go               # static file
-├── tables                      # admin tables folder
-│   ├── authors.go
-│   ├── demo
-│   │   ├── demo_class.go
-│   │   ├── demo_student.go
-│   │   ├── demo_student_class.go
-│   │   ├── demo_student_score.go
-│   │   └── tables.go
-│   ├── posts.go
-│   ├── tables.go
-│   └── users.go
-└── util                        # project util
-    ├── folder
-    │   └── path.go
-    ├── security
-    │   ├── base64.go
-    │   ├── base64_test.go
-    │   ├── stringplus.go
-    │   ├── stringplus_test.go
-    │   ├── unicode.go
-    │   └── unicode_test.go
-    ├── sys
-    │   ├── network.go
-    │   └── network_test.go
-    └── timestamp
-        └── now.go
-
-```
+工程文件定义

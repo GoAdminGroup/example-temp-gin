@@ -5,16 +5,26 @@ import (
 	"github.com/GoAdminGroup/go-admin/modules/db"
 )
 
-var globalConn db.Connection
+var globalConn *db.Connection
+
+func Conn() db.Connection {
+	if globalConn == nil {
+		return nil
+	}
+	return *globalConn
+}
 
 func SetGlobalConn(conn db.Connection) {
-	globalConn = conn
+	if globalConn == nil {
+		globalConn = &conn
+	}
 }
+
 func connection() *db.SQL {
 	if globalConn == nil {
 		return nil
 	}
-	return db.WithDriver(globalConn)
+	return db.WithDriver(*globalConn)
 }
 
 func Table(table string) (*db.SQL, error) {
