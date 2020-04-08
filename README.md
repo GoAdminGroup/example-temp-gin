@@ -96,18 +96,6 @@ go-admin v1.1.7
 
 ## fast-use
 
-### db-init
-
-- use docker-compose to init db entry [help db-docker-compose](db/README.md#db-docker-compose)
-- and install db tools see [db/README.md](db/README.md)
-
-```bash
-# use script to init goAdmin base db
-make dbPostgreImportAdmin
-# init full biz db need db password
-make dbPostgreAllBiz
-```
-
 ### project-run
 
 ```bash
