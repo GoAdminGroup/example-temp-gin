@@ -1,4 +1,4 @@
-package pubilc
+package public
 
 import (
 	"fmt"
