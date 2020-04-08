@@ -1,4 +1,4 @@
-package public
+package pubilc
 
 import (
 	"fmt"
@@ -11,6 +11,10 @@ type Resp struct {
 	Code    int         `json:"code"`
 	Msg     string      `json:"msg"`
 	Data    interface{} `json:"data"`
+}
+
+func JSONSucc(c *gin.Context, data interface{}) {
+	JSONSuccess(c, 0, "", data)
 }
 
 // 公共结构体返回

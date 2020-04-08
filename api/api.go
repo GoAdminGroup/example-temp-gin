@@ -8,5 +8,6 @@ import (
 
 func PatchApi(eng *engine.Engine, g *gin.Engine) error {
 	demo.PostData(g, eng)
+	demo.StudentCount(g, eng)
 	return nil
 }
