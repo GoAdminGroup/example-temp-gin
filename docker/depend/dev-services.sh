@@ -265,6 +265,7 @@ mysqldump \\
 	\"goadmin_session\" \\
 	\"goadmin_user_permissions\" \\
 	\"goadmin_users\" \\
+	\"goadmin_site\" \\
   --skip-disable-keys --add-drop-table --skip-extended-insert --add-locks --lock-tables
 
 mysqldump \\
