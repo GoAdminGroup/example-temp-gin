@@ -11,6 +11,31 @@ import (
 )
 
 // Initialization log
+//	zap:
+//    AtomicLevel: -1 # DebugLevel:-1 InfoLevel:0 WarnLevel:1 ErrorLevel:2
+//    FieldsAuto: false # is use auto Fields key set
+//    Fields:
+//      Key: key
+//      Val: val
+//    Development: true # is open Open file and line number
+//    Encoding: console # output format, only use console or json, default is console
+//    rotate:
+//      Filename: log/example-temp-gin.log # Log file path
+//      MaxSize: 16 # Maximum size of each zlog file, Unit: M
+//      MaxBackups: 10 # How many backups are saved in the zlog file
+//      MaxAge: 7 # How many days can the file be keep, Unit: day
+//      Compress: true # need compress
+//    EncoderConfig:
+//      TimeKey: time
+//      LevelKey: level
+//      NameKey: logger
+//      CallerKey: caller
+//      MessageKey: msg
+//      StacktraceKey: stacktrace
+//      TimeEncoder: ISO8601TimeEncoder # ISO8601TimeEncoder EpochMillisTimeEncoder EpochNanosTimeEncoder EpochTimeEncoder default is ISO8601TimeEncoder
+//      EncodeDuration: SecondsDurationEncoder # NanosDurationEncoder SecondsDurationEncoder StringDurationEncoder default is SecondsDurationEncoder
+//      EncodeLevel: CapitalColorLevelEncoder # CapitalLevelEncoder CapitalColorLevelEncoder LowercaseColorLevelEncoder LowercaseLevelEncoder default is CapitalLevelEncoder
+//      EncodeCaller: ShortCallerEncoder # ShortCallerEncoder FullCallerEncoder default is FullCallerEncoder
 func (c *ConfFile) initLog() error {
 
 	encoderConfig := zapcore.EncoderConfig{
