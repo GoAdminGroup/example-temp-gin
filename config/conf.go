@@ -117,7 +117,7 @@ type DashBoard struct {
 }
 
 type DataBases struct {
-	Default `json:"default" mapstructure:""`
+	Default Default `json:"default" mapstructure:"default"`
 }
 
 type Store struct {
