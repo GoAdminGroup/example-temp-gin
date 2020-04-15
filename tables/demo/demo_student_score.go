@@ -1,12 +1,12 @@
 package demo
 
 import (
-	"github.com/GoAdminGroup/example-temp-gin/util/timestamp"
 	"github.com/GoAdminGroup/go-admin/context"
 	"github.com/GoAdminGroup/go-admin/modules/db"
 	"github.com/GoAdminGroup/go-admin/plugins/admin/modules/table"
 	"github.com/GoAdminGroup/go-admin/template/types"
 	"github.com/GoAdminGroup/go-admin/template/types/form"
+	"github.com/sinlovgo/timezone"
 )
 
 func GetDemoStudentScoreTable(ctx *context.Context) table.Table {
@@ -57,8 +57,8 @@ func GetDemoStudentScoreTable(ctx *context.Context) table.Table {
 		FieldNotAllowEdit().
 		FieldNotAllowAdd()
 	formList.AddField("Updated_at", "updated_at", db.Datetime, form.Datetime).
-		FieldDefault(timestamp.UTCTimeSecond()).
-		FieldValue(timestamp.UTCTimeSecond()).
+		FieldDefault(timezone.UTCSecond()).
+		FieldValue(timezone.UTCSecond()).
 		FieldNotAllowEdit()
 
 	formList.SetTable("demo_student_score").SetTitle("Demo_student_score").SetDescription("Demo_student_score")

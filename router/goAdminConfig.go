@@ -6,24 +6,24 @@ import (
 )
 
 func goAdminConfig(global configProject.Conf) config.Config {
-	dbHost := parseEnvStringOrDefault(envKeyMysqlHost, global.GoAdmin.DataBases.Host)
-	dbPort := parseEnvStringOrDefault(envKeyMysqlPort, global.GoAdmin.DataBases.Port)
-	dbName := parseEnvStringOrDefault(envKeyMysqlDBName, global.GoAdmin.DataBases.Name)
-	dbUser := parseEnvStringOrDefault(envKeyMysqlDBUser, global.GoAdmin.DataBases.User)
-	dbPwd := parseEnvStringOrDefault(envKeyMysqlDBPWD, global.GoAdmin.DataBases.Pwd)
+	dbHost := parseEnvStringOrDefault(envKeyMysqlHost, global.GoAdmin.DataBases.Default.Host)
+	dbPort := parseEnvStringOrDefault(envKeyMysqlPort, global.GoAdmin.DataBases.Default.Port)
+	dbName := parseEnvStringOrDefault(envKeyMysqlDBName, global.GoAdmin.DataBases.Default.Name)
+	dbUser := parseEnvStringOrDefault(envKeyMysqlDBUser, global.GoAdmin.DataBases.Default.User)
+	dbPwd := parseEnvStringOrDefault(envKeyMysqlDBPWD, global.GoAdmin.DataBases.Default.Pwd)
 
 	cfg := config.Config{
 		Debug: configProject.IsDebug(),
 		Databases: config.DatabaseList{
 			"default": {
-				Driver:     global.GoAdmin.DataBases.Driver,
+				Driver:     global.GoAdmin.DataBases.Default.Driver,
 				Host:       dbHost,
 				Port:       dbPort,
 				Name:       dbName,
 				User:       dbUser,
 				Pwd:        dbPwd,
-				MaxIdleCon: global.GoAdmin.DataBases.MaxIdleCon,
-				MaxOpenCon: global.GoAdmin.DataBases.MaxOpenCon,
+				MaxIdleCon: global.GoAdmin.DataBases.Default.MaxIdleCon,
+				MaxOpenCon: global.GoAdmin.DataBases.Default.MaxOpenCon,
 			},
 		},
 		IndexUrl:  global.GoAdmin.IndexURL,

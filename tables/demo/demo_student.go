@@ -2,7 +2,6 @@ package demo
 
 import (
 	"github.com/GoAdminGroup/example-temp-gin/pkg/zlog"
-	"github.com/GoAdminGroup/example-temp-gin/util/timestamp"
 	"github.com/GoAdminGroup/go-admin/context"
 	"github.com/GoAdminGroup/go-admin/modules/db"
 	form2 "github.com/GoAdminGroup/go-admin/plugins/admin/modules/form"
@@ -10,6 +9,7 @@ import (
 	"github.com/GoAdminGroup/go-admin/template/types"
 	"github.com/GoAdminGroup/go-admin/template/types/form"
 	editType "github.com/GoAdminGroup/go-admin/template/types/table"
+	"github.com/sinlovgo/timezone"
 )
 
 func GetDemoStudentTable(ctx *context.Context) table.Table {
@@ -97,8 +97,8 @@ func GetDemoStudentTable(ctx *context.Context) table.Table {
 		FieldNotAllowEdit().
 		FieldNotAllowAdd()
 	formList.AddField("Updated_at", "updated_at", db.Datetime, form.Datetime).
-		FieldDefault(timestamp.UTCTimeSecond()).
-		FieldValue(timestamp.UTCTimeSecond()).
+		FieldDefault(timezone.UTCSecond()).
+		FieldValue(timezone.UTCSecond()).
 		FieldNotAllowEdit()
 
 	formList.SetTable("demo_student").SetTitle("Demo_student").SetDescription("Demo_student")

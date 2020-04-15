@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"github.com/GoAdminGroup/example-temp-gin/api/public"
 	"github.com/GoAdminGroup/example-temp-gin/model/dbglobal"
-	"github.com/GoAdminGroup/example-temp-gin/util/timestamp"
 	"github.com/GoAdminGroup/go-admin/engine"
 	"github.com/gin-gonic/gin"
+	"github.com/sinlovgo/timezone"
 	"strconv"
 )
 
@@ -37,8 +37,8 @@ func StudentCount(g *gin.Engine, eng *engine.Engine) gin.IRoutes {
 				return
 			}
 
-			fromUTCZero := timestamp.CalcDayMicroUTCZero(formDayNum)
-			toUTCZero := timestamp.CalcDayMicroUTCZero(toDayNum)
+			fromUTCZero := timezone.CalcDayMicro(formDayNum)
+			toUTCZero := timezone.CalcDayMicro(toDayNum)
 			if fromUTCZero == "" || toUTCZero == "" {
 				public.JSONErr(ctx, 0, bizPath, fmt.Errorf("time format error"))
 				return

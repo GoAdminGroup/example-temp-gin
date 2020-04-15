@@ -2,12 +2,13 @@ package demo
 
 import (
 	"github.com/GoAdminGroup/example-temp-gin/pkg/zlog"
-	"github.com/GoAdminGroup/example-temp-gin/util/timestamp"
 	"github.com/GoAdminGroup/go-admin/context"
 	"github.com/GoAdminGroup/go-admin/modules/db"
 	"github.com/GoAdminGroup/go-admin/plugins/admin/modules/table"
 	"github.com/GoAdminGroup/go-admin/template/types"
 	"github.com/GoAdminGroup/go-admin/template/types/form"
+	"github.com/sinlovgo/timezone"
+	"github.com/sinlovgo/timezone/timeparse"
 )
 
 func GetDemoGradeTable(ctx *context.Context) table.Table {
@@ -42,7 +43,7 @@ func GetDemoGradeTable(ctx *context.Context) table.Table {
 		FieldFilterable(types.FilterType{FormType: form.DatetimeRange}). // Show filters by creation time
 		FieldDisplay(func(model types.FieldModel) interface{} {
 			zlog.S().Debugf("model.Value -> %v", model.Value)
-			timeStr, err := timestamp.ParseLocation("2006-01-02T15:04:05Z", "2006-01-02 15:04:05", model.Value, "UTC", "Asia/Shanghai")
+			timeStr, err := timeparse.Location("2006-01-02T15:04:05Z", "2006-01-02 15:04:05", model.Value, "UTC", "Asia/Shanghai")
 			if err != nil {
 				return model.Value
 			}
@@ -63,8 +64,8 @@ func GetDemoGradeTable(ctx *context.Context) table.Table {
 		FieldNotAllowEdit().
 		FieldNotAllowAdd()
 	formList.AddField("Updated_at", "updated_at", db.Datetime, form.Datetime).
-		FieldDefault(timestamp.UTCTimeSecond()).
-		FieldValue(timestamp.UTCTimeSecond()).
+		FieldDefault(timezone.UTCSecond()).
+		FieldValue(timezone.UTCSecond()).
 		FieldNotAllowEdit()
 
 	formList.SetTable("demo_grade").SetTitle("Demo_grade").SetDescription("Demo_grade")
