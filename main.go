@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/GoAdminGroup/example-temp-gin/pkg/zlog"
 	"github.com/GoAdminGroup/example-temp-gin/router"
+	"github.com/sinlovgo/timezone"
 	"io/ioutil"
 	"net/http"
 	"time"
@@ -36,6 +37,9 @@ func main() {
 		panic(err)
 	}
 	fmt.Printf("%s -> %v at time: %v\n", "start service", viper.GetString("name"), time.Now().String())
+
+	// set timezone
+	timezone.SetZoneUTC()
 
 	// Set gin mode.
 	runMode := viper.GetString("run_mode")
